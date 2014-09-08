@@ -21,12 +21,12 @@ Ideas for the architecture and design were shamelessly taken from the phenomenal
 
 > **Game Programming Patterns** is a must read. If you think of yourself a game developer or enthusiast, you owe to yourself reading it.
 
-Also worth mentioning, is the handy work of [ForeignGuyMike](http://neetlife2.blogspot.com.ar/) who created the [LibGDX Box2D Tiled video tutorial series](http://youtu.be/85A1w1iD2oA?list=PL-2t7SM0vDfdYJ5Pq9vxeivblbZuFvGJK). Great starting out.
+Also worth mentioning, is the handy work of [ForeignGuyMike](http://neetlife2.blogspot.com.ar/) who created the [LibGDX Box2D Tiled video tutorial series](http://youtu.be/85A1w1iD2oA?list=PL-2t7SM0vDfdYJ5Pq9vxeivblbZuFvGJK). Great for starting out with Box2D and drawing sprites.
 
 ----------
 
-Controls
-----------
+#### Controls
+
 
 * You move the rabbit character around by using the `W`, `A`, `S`, `D` keys. Self explanatory.
 * If you fall down a pit, you'll immediately respawn at the start of the level. There's no way to die. 
@@ -34,7 +34,7 @@ Controls
 ------
 
 Screenshots
---------------
+-----------
 ![At the start of the level](https://db.tt/Vmbu097w "Screenshot")
 ![Borrowed inspiration](https://db.tt/X8zrWwCw "Screenshot 2")
 
