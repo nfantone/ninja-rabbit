@@ -17,7 +17,7 @@ This project was developed using the following frameworks and tools:
 > All of the above are free and open source projects. You might as well considered donating or contributing something back if they have managed to help you in some way or if you enjoy using them.
 
 #### Design
-Ideas for the architecture and design were shamelessly taken from the phenomenal [Game Programming Patterns](http://gameprogrammingpatterns.com) online book, by _EA_ developer [@munificentbob](https://twitter.com/intent/user?screen_name=munificentbob), following the path of [Erich Gamma](http://https://en.wikipedia.org/wiki/Erich_Gamma) and cia. Honorable mentions go to the [Component](http://) and [State](http://) design patterns. Both of them were used in **ninja-rabbit**.
+Ideas for the architecture and design were shamelessly taken from the phenomenal [Game Programming Patterns](http://gameprogrammingpatterns.com) online book, by _EA_ developer [@munificentbob](https://twitter.com/intent/user?screen_name=munificentbob), following the path of [Erich Gamma](http://https://en.wikipedia.org/wiki/Erich_Gamma) and cia. Honorable mentions go to the [Component](http://gameprogrammingpatterns.com/component.html) and [State](http://gameprogrammingpatterns.com/state.html) design patterns. Both of them were used in **ninja-rabbit**.
 
 > **Game Programming Patterns** is a must read. If you think of yourself a game developer or enthusiast, you owe to yourself reading it.
 
