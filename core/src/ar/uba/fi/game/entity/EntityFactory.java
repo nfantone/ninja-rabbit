@@ -23,8 +23,14 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author nfantone
  *
  */
-public class EntityFactory {
+public final class EntityFactory {
 	private static final String RABBIT_IDENTIFIER = "rabbit";
+
+	/**
+	 * No instances of this classs should be created. This is meant to be used as a static factory.
+	 */
+	private EntityFactory() {
+	};
 
 	/**
 	 * Creates a new instance of a {@link NinjaRabbit}, defining its graphical and physical
@@ -41,7 +47,6 @@ public class EntityFactory {
 		GraphicsProcessor graphics = new NinjaRabbitGraphicsProcessor();
 		Body body = creatNinjaRabbitBody(world);
 		return new NinjaRabbit(body, graphics, physics);
-
 	}
 
 	private static Body creatNinjaRabbitBody(final World world) {
