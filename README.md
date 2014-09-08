@@ -13,6 +13,7 @@ This project was developed using the following frameworks and tools:
  - [Box2D](http://box2d.org/) - Physics engine. _libGDX_ has a built-in **JAVA** implementation of it.
  - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/wiki/Home) - A set of utility classes and methods that alleviates common work while using _libGDX_. Written by the renowned @dermetfan.
  - [Tiled](http://www.mapeditor.org) - Free tile map editor. Used as a level editor, as well as laying out physics related objects.
+ - [TexturePacker](https://www.codeandweb.com/texturepacker) - Creation of sprite sheets. Allows exporting to _libGDX_ atlas format.
 
 > All of the above are free and open source projects. You might as well considered donating or contributing something back if they have managed to help you in some way or if you enjoy using them.
 
