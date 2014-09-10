@@ -1,6 +1,6 @@
 package ar.uba.fi.game.physics;
 
-import ar.uba.fi.game.entity.NinjaRabbit;
+import ar.uba.fi.game.entity.Entity;
 
 import com.badlogic.gdx.physics.box2d.ContactListener;
 
@@ -17,5 +17,5 @@ public interface PhysicsProcessor extends ContactListener {
 	 * @param character
 	 *            The game entity whose physical properties are to be updated.
 	 */
-	void update(final NinjaRabbit character);
+	void update(final Entity character);
 }

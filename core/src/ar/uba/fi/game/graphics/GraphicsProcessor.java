@@ -1,6 +1,6 @@
 package ar.uba.fi.game.graphics;
 
-import ar.uba.fi.game.entity.NinjaRabbit;
+import ar.uba.fi.game.entity.Entity;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,7 +20,7 @@ public interface GraphicsProcessor {
 	 * @param batch
 	 *            The {@link Batch} that should be use to draw the corresponding {@link Sprite}.
 	 */
-	void draw(NinjaRabbit character, Batch batch);
+	void draw(Entity character, Batch batch);
 
 	/**
 	 * Frees resources associated with this processor. Must be call when not needed anymore.

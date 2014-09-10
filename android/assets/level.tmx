@@ -10,7 +10,7 @@
  </layer>
  <layer name="tiles" width="50" height="10">
   <data encoding="base64" compression="zlib">
-   eJztkdkKgDAMBFMVDxRvLV7//5vuiygqpTYVFRyYl0CSDSE6Ep3UdBGMXu4cSWv2GpYX9zgwMNi7J4UZc8aSPYbJpi41enNYGOwUZO9/X6WCDWyfDsKkgz0cng7yw2KEE8O34EKP4d34CkPLd3B/qnIGyvAGgQ==
+   eJzd0dkOQDAQBdDaCbEvsf3/b7ovokGoTilucl6azNIMY9sEO2+iMQi11D4NW3YvIb84xwRPYu46MSTEHvPuIUTceyNQm0ImMdNg6u731RRQQa17EWJa6KDXvcgP44DL8W+cNcAo6U2xwJb0RNwD/H1V/INy0zMT2+AGew==
   </data>
  </layer>
  <objectgroup name="bodies" width="50" height="10">
@@ -21,7 +21,7 @@
     <property name="restitution" value="0.2"/>
     <property name="userData" value="ground"/>
    </properties>
-   <polyline points="0,0 0,-155 18,-168 1006,-165"/>
+   <polyline points="0,0 0,-155 18,-168 941,-167"/>
   </object>
   <object name="ground" type="fixture" x="1" y="619">
    <properties>
@@ -51,6 +51,11 @@
     <property name="bodyType" value="StaticBody"/>
    </properties>
    <polyline points="0,0 -1,-619 3197,-616 3197,-23"/>
+  </object>
+  <object name="platform" type="fixture" x="2112" y="427" width="268" height="21">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

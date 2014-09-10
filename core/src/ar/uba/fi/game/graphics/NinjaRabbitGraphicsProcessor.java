@@ -8,6 +8,7 @@ import net.dermetfan.utils.libgdx.graphics.AnimatedBox2DSprite;
 import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
 import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
 import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -91,7 +92,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
-	public void draw(final NinjaRabbit character, final Batch batch) {
+	public void draw(final Entity character, final Batch batch) {
 		Box2DSprite frame = null;
 
 		if (character.isExecuting(NinjaRabbit.DEAD)) {
@@ -118,13 +119,10 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 				jumpSprite.setTime(0.0f);
 			}
 
-			frame.setPosition(
-					-frame.getWidth() / 2.0f +
-					Box2DUtils.width(character.getBody().getFixtureList().first()) / 2.0f,
-					-frame.getHeight() / 2.0f +
-					Box2DUtils.height(character.getBody().getFixtureList().first()) / 2.0f + 60.0f /
-					FiubaGame.PPM);
 		}
+		frame.setX(
+				-frame.getWidth() / 2.0f +
+						Box2DUtils.width(character.getBody()) / (facingRight ? 2.8f : 1.55f));
 
 		frame.draw(batch, character.getBody());
 	}
