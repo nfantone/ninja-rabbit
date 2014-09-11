@@ -22,9 +22,4 @@ public interface GraphicsProcessor {
 	 */
 	void draw(Entity character, Batch batch);
 
-	/**
-	 * Frees resources associated with this processor. Must be call when not needed anymore.
-	 */
-	void dispose();
-
 }

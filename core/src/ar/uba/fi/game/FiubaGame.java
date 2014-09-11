@@ -11,6 +11,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,13 +36,24 @@ public class FiubaGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private TiledMapRenderer tileMapRenderer;
 	private Box2DDebugRenderer b2dRenderer;
+	private AssetManager assets;
 	private NinjaRabbit ninjaRabbit;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -9.8f), true);
-		ninjaRabbit = EntityFactory.createNinjaRabbit(world);
+		assets = new AssetSystem();
+		assets.load(AssetSystem.NINJA_RABBIT_ATLAS);
+		assets.load(AssetSystem.NINJA_RABBIT_THEME);
+		assets.load(AssetSystem.JUMP_FX);
+		assets.finishLoading();
+
+		Music theme = assets.get(AssetSystem.NINJA_RABBIT_THEME);
+		theme.setVolume(0.5f);
+		theme.play();
+
+		ninjaRabbit = EntityFactory.createNinjaRabbit(world, assets);
 
 		InputProcessor inputProcessor = new InputMultiplexer(new
 				NinjaRabbitInputProcessor(ninjaRabbit),
@@ -97,7 +110,7 @@ public class FiubaGame extends ApplicationAdapter {
 
 	@Override
 	public void dispose() {
-		ninjaRabbit.dispose();
+		assets.dispose();
 		b2dRenderer.dispose();
 		world.dispose();
 	}

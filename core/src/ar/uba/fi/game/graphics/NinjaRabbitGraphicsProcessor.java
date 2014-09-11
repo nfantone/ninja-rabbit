@@ -7,10 +7,13 @@ import net.dermetfan.utils.libgdx.box2d.Box2DUtils;
 import net.dermetfan.utils.libgdx.graphics.AnimatedBox2DSprite;
 import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
 import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
+import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.entity.Direction;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -24,7 +27,6 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
-	private static final String NINJA_RABBIT_ATLAS = "ninja-rabbit.pack";
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	private static final String DUCK_REGION = "duck";
@@ -36,11 +38,9 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private final AnimatedBox2DSprite walkLeftSprite;
 	private final AnimatedBox2DSprite jumpSprite;
 	private final AnimatedBox2DSprite duckSprite;
-	private boolean facingRight;
 
-	public NinjaRabbitGraphicsProcessor() {
-		facingRight = true;
-		textureAtlas = new TextureAtlas(NINJA_RABBIT_ATLAS);
+	public NinjaRabbitGraphicsProcessor(final AssetManager assets) {
+		textureAtlas = assets.get(AssetSystem.NINJA_RABBIT_ATLAS);
 
 		Array<Sprite> walkingSprites = textureAtlas.createSprites(WALK_REGION);
 		standingSprite = new Box2DSprite(walkingSprites.first());
@@ -88,7 +88,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
@@ -98,22 +98,22 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		if (character.isExecuting(NinjaRabbit.DEAD)) {
 			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
 			frame = standingSprite;
-			facingRight = true;
+			character.setDirection(Direction.RIGHT);
 			character.stop(NinjaRabbit.DEAD);
 		} else {
 			if (character.isExecuting(NinjaRabbit.JUMP)) {
-				jumpSprite.flipFrames(!(facingRight ^ jumpSprite.isFlipX()), false, false);
+				jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
 				frame = jumpSprite;
 			} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
 				frame = walkRightSprite;
-				facingRight = true;
+				character.setDirection(Direction.RIGHT);
 			} else if (character.isExecuting(NinjaRabbit.LEFT)) {
 				frame = walkLeftSprite;
-				facingRight = false;
+				character.setDirection(Direction.LEFT);
 			} else if (character.isExecuting(NinjaRabbit.DUCK)) {
 				frame = duckSprite;
 			} else {
-				standingSprite.flip(!(facingRight ^ standingSprite.isFlipX()), false);
+				standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
 				frame = standingSprite;
 				duckSprite.setTime(0.0f);
 				jumpSprite.setTime(0.0f);
@@ -122,18 +122,8 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		}
 		frame.setX(
 				-frame.getWidth() / 2.0f +
-						Box2DUtils.width(character.getBody()) / (facingRight ? 2.8f : 1.55f));
+				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f));
 
 		frame.draw(batch, character.getBody());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ar.uba.fi.game.entity.GraphicsProcessor#dispose()
-	 */
-	@Override
-	public void dispose() {
-		textureAtlas.dispose();
 	}
 }

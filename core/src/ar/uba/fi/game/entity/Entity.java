@@ -1,5 +1,6 @@
 package ar.uba.fi.game.entity;
 
+import ar.uba.fi.game.audio.AudioProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
 
@@ -23,18 +24,30 @@ public abstract class Entity {
 	 * The Box2D {@link Body} containing all physical properties of this entity.
 	 */
 	private Body body;
+
+	/**
+	 * The direction the body of this entity if facing (left or right).
+	 */
+	private Direction direction;
+
 	/**
 	 * A {@link GraphicsProcessor} used to draw the current sprite on the screen.
 	 */
-	protected final GraphicsProcessor graphics;
+	private final GraphicsProcessor graphics;
 	/**
 	 * A {@link PhysicsProcessor} to handle collisions and movement.
 	 */
-	protected final PhysicsProcessor physics;
+	private final PhysicsProcessor physics;
 
-	public Entity(final GraphicsProcessor graphics, final PhysicsProcessor physics) {
+	/**
+	 * An {@link AudioProcessor} that handles audio events according to this entity's state.
+	 */
+	private final AudioProcessor audio;
+
+	public Entity(final GraphicsProcessor graphics, final PhysicsProcessor physics, final AudioProcessor audio) {
 		this.graphics = graphics;
 		this.physics = physics;
+		this.audio = audio;
 	}
 
 	/**
@@ -49,6 +62,7 @@ public abstract class Entity {
 	 *            The {@link Batch} to use for drawing.
 	 */
 	public void update(final Batch batch) {
+		audio.update(this);
 		physics.update(this);
 		graphics.draw(this, batch);
 	}
@@ -87,11 +101,15 @@ public abstract class Entity {
 		return body;
 	}
 
+	public Direction getDirection() {
+		return direction;
+	}
+
 	public void setBody(final Body body) {
 		this.body = body;
 	}
 
-	public void dispose() {
-		graphics.dispose();
+	public void setDirection(final Direction direction) {
+		this.direction = direction;
 	}
 }

@@ -1,5 +1,6 @@
 package ar.uba.fi.game.entity;
 
+import ar.uba.fi.game.audio.AudioProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.physics.BodyProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
@@ -27,14 +28,15 @@ public class NinjaRabbit extends Entity {
 	 */
 	protected final BodyProcessor bodyProcessor;
 
-	public NinjaRabbit(final BodyProcessor bodyProcessor, final GraphicsProcessor graphics, final PhysicsProcessor physics) {
-		super(graphics, physics);
+	public NinjaRabbit(final BodyProcessor bodyProcessor, final GraphicsProcessor graphics, final PhysicsProcessor physics,
+			final AudioProcessor audio) {
+		super(graphics, physics, audio);
 		this.bodyProcessor = bodyProcessor;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.entity.Entity#update(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override

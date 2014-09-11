@@ -1,6 +1,7 @@
 package ar.uba.fi.game.physics;
 
 import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.entity.Direction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -21,25 +22,6 @@ public final class NinjaRabbitBodyFactory {
 	private static final int FOOT_FIXTURE_INDEX = 9;
 	private static final String RABBIT_IDENTIFIER = "rabbit";
 
-	public enum BodyDirection {
-		LEFT("rabbit-left"), RIGHT("rabbit-right");
-
-		private String direction;
-
-		private BodyDirection(final String direction) {
-			this.direction = direction;
-		}
-
-		public String direction() {
-			return direction;
-		}
-
-		@Override
-		public String toString() {
-			return direction;
-		}
-	}
-
 	private final BodyEditorLoader loader;
 	private final BodyDef bdef;
 	private final FixtureDef fdef;
@@ -57,9 +39,9 @@ public final class NinjaRabbitBodyFactory {
 		fdef.friction = 1.4f;
 	};
 
-	public Body createNinjaRabbitBody(final World world, final BodyDirection direction) {
+	public Body createNinjaRabbitBody(final World world, final Direction direction) {
 		Body rabbitBody = world.createBody(bdef);
-		loader.attachFixture(rabbitBody, direction.direction(), fdef, NINJA_RABBIT_SCALE);
+		loader.attachFixture(rabbitBody, RABBIT_IDENTIFIER + "-" + direction.direction(), fdef, NINJA_RABBIT_SCALE);
 
 		Fixture footSensor = rabbitBody.getFixtureList().get(FOOT_FIXTURE_INDEX);
 		footSensor.setUserData(NinjaRabbitPhysicsProcessor.FOOT_IDENTIFIER);
