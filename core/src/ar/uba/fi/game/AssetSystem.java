@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
@@ -14,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  *
  */
 public class AssetSystem extends AssetManager {
+	public static final AssetDescriptor<Sound> CRUNCH_FX = new AssetDescriptor<>("sfx" + File.separator + "crunch.ogg",
+			Sound.class);
+
 	public static AssetDescriptor<TextureAtlas> NINJA_RABBIT_ATLAS = new AssetDescriptor<>("ninja-rabbit.pack",
 			TextureAtlas.class);
 
@@ -22,5 +26,8 @@ public class AssetSystem extends AssetManager {
 
 	public static AssetDescriptor<Sound> JUMP_FX = new AssetDescriptor<>("sfx" + File.separator + "jump.ogg",
 			Sound.class);
+
+	public static AssetDescriptor<Texture> CARROT_TEXTURE = new AssetDescriptor<>("carrot.png",
+			Texture.class);
 
 }

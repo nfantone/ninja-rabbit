@@ -1,11 +1,13 @@
 package ar.uba.fi.game.input;
 
+import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
 /**
+ * Handles input from keyboard to change the inner state of a {@link NinjaRabbit}.
  *
  * @author nfantone
  *
@@ -16,13 +18,13 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 	private final static int DUCK_KEY = Keys.S;
 	private final static int RIGHT_KEY = Keys.D;
 
-	private final NinjaRabbit character;
+	private final Entity character;
 
-	public NinjaRabbitInputProcessor(final NinjaRabbit character) {
-		if (character == null) {
+	public NinjaRabbitInputProcessor(final Entity ninjaRabbit) {
+		if (ninjaRabbit == null) {
 			throw new IllegalArgumentException("'character' cannot be null");
 		}
-		this.character = character;
+		this.character = ninjaRabbit;
 	}
 
 	@Override

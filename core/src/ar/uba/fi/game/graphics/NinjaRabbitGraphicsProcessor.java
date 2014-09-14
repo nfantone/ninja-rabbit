@@ -88,7 +88,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
@@ -120,9 +120,10 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 			}
 
 		}
-		frame.setX(
+		frame.setPosition(
 				-frame.getWidth() / 2.0f +
-				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f));
+						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
+				-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.53f);
 
 		frame.draw(batch, character.getBody());
 	}

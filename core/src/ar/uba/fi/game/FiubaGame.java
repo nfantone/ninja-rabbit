@@ -1,25 +1,17 @@
 package ar.uba.fi.game;
 
-import net.dermetfan.utils.libgdx.box2d.Box2DMapObjectParser;
-import ar.uba.fi.game.entity.EntityFactory;
-import ar.uba.fi.game.entity.NinjaRabbit;
+import ar.uba.fi.game.entity.Entity;
+import ar.uba.fi.game.entity.NinjaRabbitFactory;
 import ar.uba.fi.game.graphics.BoundedCamera;
-import ar.uba.fi.game.input.NinjaRabbitInputProcessor;
+import ar.uba.fi.game.map.LevelFactory;
+import ar.uba.fi.game.map.LevelRenderer;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -34,10 +26,10 @@ public class FiubaGame extends ApplicationAdapter {
 	private World world;
 	private ScreenViewport viewport;
 	private SpriteBatch batch;
-	private TiledMapRenderer tileMapRenderer;
 	private Box2DDebugRenderer b2dRenderer;
 	private AssetManager assets;
-	private NinjaRabbit ninjaRabbit;
+	private Entity ninjaRabbit;
+	private LevelRenderer mapRenderer;
 
 	@Override
 	public void create() {
@@ -47,37 +39,17 @@ public class FiubaGame extends ApplicationAdapter {
 		assets.load(AssetSystem.NINJA_RABBIT_ATLAS);
 		assets.load(AssetSystem.NINJA_RABBIT_THEME);
 		assets.load(AssetSystem.JUMP_FX);
+		assets.load(AssetSystem.CRUNCH_FX);
+		assets.load(AssetSystem.CARROT_TEXTURE);
 		assets.finishLoading();
 
-		Music theme = assets.get(AssetSystem.NINJA_RABBIT_THEME);
-		theme.setVolume(0.5f);
-		theme.play();
-
-		ninjaRabbit = EntityFactory.createNinjaRabbit(world, assets);
-
-		InputProcessor inputProcessor = new InputMultiplexer(new
-				NinjaRabbitInputProcessor(ninjaRabbit),
-				new InputAdapter() {
-			@Override
-			public boolean scrolled(final int amount) {
-				viewport.setUnitsPerPixel(viewport.getUnitsPerPixel() + viewport.getUnitsPerPixel() /
-						amount / 8f);
-				viewport.update(viewport.getScreenWidth(), viewport.getScreenHeight());
-				return true;
-			}
-		});
-
-		Gdx.input.setInputProcessor(inputProcessor);
-
-		TiledMap tileMap = new TmxMapLoader().load(LEVEL_MAP_FILE);
-		Box2DMapObjectParser objectParser = new Box2DMapObjectParser(1 / PPM);
-		objectParser.load(world, tileMap);
-		tileMapRenderer = new OrthogonalTiledMapRenderer(tileMap, 1 / PPM);
+		ninjaRabbit = new NinjaRabbitFactory().create(world, assets);
+		mapRenderer = LevelFactory.create(world, assets, LEVEL_MAP_FILE, 1 / PPM);
 
 		viewport = new ScreenViewport();
 		viewport.setUnitsPerPixel(1 / PPM);
-		viewport.setCamera(new BoundedCamera(0.0f, tileMap.getProperties().get("width", Integer.class).floatValue()
-				* tileMap.getProperties().get("tilewidth", Integer.class).floatValue() / PPM));
+		viewport.setCamera(new BoundedCamera(0.0f, mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
+				* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue() / PPM));
 
 		b2dRenderer = new Box2DDebugRenderer();
 	}
@@ -93,10 +65,10 @@ public class FiubaGame extends ApplicationAdapter {
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 
-		tileMapRenderer.setView((OrthographicCamera) viewport.getCamera());
-		tileMapRenderer.render();
+		mapRenderer.render((OrthographicCamera) viewport.getCamera());
 
 		batch.begin();
+		mapRenderer.update(batch);
 		ninjaRabbit.update(batch);
 		batch.end();
 

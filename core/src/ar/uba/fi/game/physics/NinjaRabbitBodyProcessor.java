@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public class NinjaRabbitBodyProcessor implements BodyProcessor {
-	private final NinjaRabbitBodyFactory bodyFactory;
+	private final BodyFactory bodyFactory;
 	private final World world;
 	private Direction lastKnownDirection;
 
@@ -35,7 +35,7 @@ public class NinjaRabbitBodyProcessor implements BodyProcessor {
 	public void update(final Entity character) {
 		if (character.getBody() == null) {
 			character.setDirection(Direction.RIGHT);
-			character.setBody(bodyFactory.createNinjaRabbitBody(world, Direction.RIGHT));
+			character.setBody(bodyFactory.create(world, Direction.RIGHT));
 			lastKnownDirection = Direction.RIGHT;
 		} else {
 			if (!lastKnownDirection.equals(character.getDirection())) {
@@ -59,7 +59,7 @@ public class NinjaRabbitBodyProcessor implements BodyProcessor {
 		float angle = character.getBody().getAngle();
 
 		world.destroyBody(character.getBody());
-		Body newBody = bodyFactory.createNinjaRabbitBody(world, character.getDirection());
+		Body newBody = bodyFactory.create(world, character.getDirection());
 		newBody.setTransform(position, angle);
 		newBody.setLinearVelocity(velocity);
 		character.setBody(newBody);
