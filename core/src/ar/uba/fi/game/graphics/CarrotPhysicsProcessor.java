@@ -29,7 +29,6 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 		} else if (CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
 			((Collectible) contact.getFixtureB().getBody().getUserData()).execute(Collectible.COLLECTED);
 		}
-
 	}
 
 	@Override

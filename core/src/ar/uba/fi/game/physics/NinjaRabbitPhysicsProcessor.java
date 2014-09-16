@@ -5,6 +5,7 @@ package ar.uba.fi.game.physics;
 
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
+import ar.uba.fi.game.graphics.CarrotPhysicsProcessor;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -77,6 +78,14 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 				LEFT_SENSOR_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
 			leftContacts++;
 		}
+
+		// Player had picked a carrot
+		if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
+			((NinjaRabbit) contact.getFixtureB().getBody().getUserData()).execute(NinjaRabbit.COLLECT);
+		} else if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
+			((NinjaRabbit) contact.getFixtureA().getBody().getUserData()).execute(NinjaRabbit.COLLECT);
+		}
+
 	}
 
 	@Override

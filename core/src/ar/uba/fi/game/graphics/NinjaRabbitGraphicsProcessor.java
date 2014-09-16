@@ -88,7 +88,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
@@ -99,7 +99,6 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
 			frame = standingSprite;
 			character.setDirection(Direction.RIGHT);
-			character.stop(NinjaRabbit.DEAD);
 		} else {
 			if (character.isExecuting(NinjaRabbit.JUMP)) {
 				jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
@@ -122,7 +121,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		}
 		frame.setPosition(
 				-frame.getWidth() / 2.0f +
-						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
+				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
 				-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.53f);
 
 		frame.draw(batch, character.getBody());

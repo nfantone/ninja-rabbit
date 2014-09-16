@@ -61,7 +61,7 @@ public final class LevelFactory {
 				Music.class);
 		theme.setVolume(0.5f);
 		theme.setLooping(true);
-		theme.play();
+		// theme.play();
 
 		return renderer;
 	}

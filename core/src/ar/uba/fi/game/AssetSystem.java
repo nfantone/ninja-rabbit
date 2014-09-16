@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
@@ -29,5 +30,8 @@ public class AssetSystem extends AssetManager {
 
 	public static AssetDescriptor<Texture> CARROT_TEXTURE = new AssetDescriptor<>("carrot.png",
 			Texture.class);
+
+	public static AssetDescriptor<BitmapFont> HUD_FONT = new AssetDescriptor<>("font" + File.separator + "thirteen-pixel.fnt",
+			BitmapFont.class);
 
 }

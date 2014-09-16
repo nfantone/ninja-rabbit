@@ -3,6 +3,7 @@ package ar.uba.fi.game;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbitFactory;
 import ar.uba.fi.game.graphics.BoundedCamera;
+import ar.uba.fi.game.graphics.hud.StatusBar;
 import ar.uba.fi.game.map.LevelFactory;
 import ar.uba.fi.game.map.LevelRenderer;
 
@@ -30,6 +31,7 @@ public class FiubaGame extends ApplicationAdapter {
 	private AssetManager assets;
 	private Entity ninjaRabbit;
 	private LevelRenderer mapRenderer;
+	private StatusBar hud;
 
 	@Override
 	public void create() {
@@ -41,9 +43,11 @@ public class FiubaGame extends ApplicationAdapter {
 		assets.load(AssetSystem.JUMP_FX);
 		assets.load(AssetSystem.CRUNCH_FX);
 		assets.load(AssetSystem.CARROT_TEXTURE);
+		assets.load(AssetSystem.HUD_FONT);
 		assets.finishLoading();
 
-		ninjaRabbit = new NinjaRabbitFactory().create(world, assets);
+		hud = new StatusBar(batch, assets);
+		ninjaRabbit = new NinjaRabbitFactory().create(world, assets, hud);
 		mapRenderer = LevelFactory.create(world, assets, LEVEL_MAP_FILE, 1 / PPM);
 
 		viewport = new ScreenViewport();
@@ -52,6 +56,7 @@ public class FiubaGame extends ApplicationAdapter {
 				* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue() / PPM));
 
 		b2dRenderer = new Box2DDebugRenderer();
+
 	}
 
 	@Override
@@ -60,8 +65,9 @@ public class FiubaGame extends ApplicationAdapter {
 		Gdx.graphics.setTitle(String.format(GAME_TITLE, Gdx.graphics.getFramesPerSecond()));
 		world.step(TIME_STEP, 8, 3);
 
-		viewport.getCamera().position.x = ninjaRabbit.getBody() == null ? 0.0f : ninjaRabbit.getBody().getPosition().x
-				+ viewport.getWorldWidth() / 4.0f;
+		viewport.getCamera().position.x = ninjaRabbit.getBody() == null ? 0.0f :
+				ninjaRabbit.getBody().getPosition().x
+						+ viewport.getWorldWidth() / 4.0f;
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 
@@ -72,12 +78,15 @@ public class FiubaGame extends ApplicationAdapter {
 		ninjaRabbit.update(batch);
 		batch.end();
 
-		b2dRenderer.render(world, viewport.getCamera().combined);
+		hud.render();
+
+		// b2dRenderer.render(world, viewport.getCamera().combined);
 	}
 
 	@Override
 	public void resize(final int width, final int height) {
 		viewport.update(width, height, true);
+		hud.resize(width, height);
 	}
 
 	@Override
@@ -85,5 +94,7 @@ public class FiubaGame extends ApplicationAdapter {
 		assets.dispose();
 		b2dRenderer.dispose();
 		world.dispose();
+		hud.dispose();
+		batch.dispose();
 	}
 }
