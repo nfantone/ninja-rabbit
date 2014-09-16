@@ -42,7 +42,6 @@ public class FiubaGame extends ApplicationAdapter {
 		assets.load(AssetSystem.NINJA_RABBIT_THEME);
 		assets.load(AssetSystem.JUMP_FX);
 		assets.load(AssetSystem.CRUNCH_FX);
-		assets.load(AssetSystem.CARROT_TEXTURE);
 		assets.load(AssetSystem.HUD_FONT);
 		assets.finishLoading();
 

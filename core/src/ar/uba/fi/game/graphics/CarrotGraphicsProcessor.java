@@ -13,10 +13,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  *
  */
 public class CarrotGraphicsProcessor implements GraphicsProcessor {
+	private static final String CARROT_REGION = "carrot";
 	private final Box2DSprite carrot;
 
 	public CarrotGraphicsProcessor(final AssetManager manager) {
-		carrot = new Box2DSprite(manager.get(AssetSystem.CARROT_TEXTURE));
+		carrot = new Box2DSprite(manager.get(AssetSystem.NINJA_RABBIT_ATLAS).findRegion(CARROT_REGION));
 	}
 
 	@Override

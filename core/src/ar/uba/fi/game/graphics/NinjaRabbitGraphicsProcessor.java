@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Array;
 public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
-	private static final String DUCK_REGION = "duck";
+	// private static final String DUCK_REGION = "duck";
 	private static final Vector2 RESPAWN_POSITION = new Vector2(70 / FiubaGame.PPM, 150 / FiubaGame.PPM);
 
 	private final TextureAtlas textureAtlas;
@@ -37,7 +37,8 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private final AnimatedBox2DSprite walkRightSprite;
 	private final AnimatedBox2DSprite walkLeftSprite;
 	private final AnimatedBox2DSprite jumpSprite;
-	private final AnimatedBox2DSprite duckSprite;
+
+	// private final AnimatedBox2DSprite duckSprite;
 
 	public NinjaRabbitGraphicsProcessor(final AssetManager assets) {
 		textureAtlas = assets.get(AssetSystem.NINJA_RABBIT_ATLAS);
@@ -67,28 +68,28 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		jumpSprite.setSize(jumpSprite.getWidth() / FiubaGame.PPM,
 				jumpSprite.getHeight() / FiubaGame.PPM);
 
-		Array<Sprite> duckSprites = textureAtlas.createSprites(DUCK_REGION);
-
-		for (Sprite duck : duckSprites) {
-			// duck.setRegionHeight((int) (duck.getHeight() / FiubaGame.PPM));
-			// duck.setRegionWidth((int) (duck.getWidth() / FiubaGame.PPM));
-			duck.setSize(duck.getWidth() / FiubaGame.PPM,
-					duck.getHeight() / FiubaGame.PPM);
-		}
-
-		animation = new Animation(1 / 16.0f, duckSprites);
-		duckSprite = new AnimatedBox2DSprite(new AnimatedSprite(animation));
-		duckSprite.setAdjustSize(false);
-		duckSprite.setUseFrameRegionSize(true);
-		// duckSprite.setRegionHeight((int) (duckSprite.getHeight() / FiubaGame.PPM));
-		// duckSprite.setRegionWidth((int) (duckSprite.getWidth() / FiubaGame.PPM));
-		duckSprite.setSize(duckSprite.getWidth() / FiubaGame.PPM, duckSprite.getHeight() /
-				FiubaGame.PPM);
+		// Array<Sprite> duckSprites = textureAtlas.createSprites(DUCK_REGION);
+		//
+		// for (Sprite duck : duckSprites) {
+		// // duck.setRegionHeight((int) (duck.getHeight() / FiubaGame.PPM));
+		// // duck.setRegionWidth((int) (duck.getWidth() / FiubaGame.PPM));
+		// duck.setSize(duck.getWidth() / FiubaGame.PPM,
+		// duck.getHeight() / FiubaGame.PPM);
+		// }
+		//
+		// animation = new Animation(1 / 16.0f, duckSprites);
+		// duckSprite = new AnimatedBox2DSprite(new AnimatedSprite(animation));
+		// duckSprite.setAdjustSize(false);
+		// duckSprite.setUseFrameRegionSize(true);
+		// // duckSprite.setRegionHeight((int) (duckSprite.getHeight() / FiubaGame.PPM));
+		// // duckSprite.setRegionWidth((int) (duckSprite.getWidth() / FiubaGame.PPM));
+		// duckSprite.setSize(duckSprite.getWidth() / FiubaGame.PPM, duckSprite.getHeight() /
+		// FiubaGame.PPM);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
@@ -110,18 +111,17 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 				frame = walkLeftSprite;
 				character.setDirection(Direction.LEFT);
 			} else if (character.isExecuting(NinjaRabbit.DUCK)) {
-				frame = duckSprite;
+				// frame = duckSprite;
 			} else {
 				standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
 				frame = standingSprite;
-				duckSprite.setTime(0.0f);
+				// duckSprite.setTime(0.0f);
 				jumpSprite.setTime(0.0f);
 			}
-
 		}
 		frame.setPosition(
 				-frame.getWidth() / 2.0f +
-				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
+						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
 				-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.53f);
 
 		frame.draw(batch, character.getBody());
