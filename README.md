@@ -5,6 +5,14 @@ A very simple desktop, 2D platform game built in **JAVA** with _libGDX_ simply t
 
 ----------
 
+#### Running the game
+The following commands should be enough to run the game in any desktop platform with **JAVA** 1.8+ installed.
+
+```
+git clone https://github.com/nfantone/ninja-rabbit.git
+cd ninja-rabbit
+gradlew desktop:run
+```
 
 #### Technologies
 This project was developed using the following frameworks and tools:
