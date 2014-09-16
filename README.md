@@ -29,7 +29,7 @@ This project was developed using the following frameworks and tools:
 > _libGDX_ has [its own](https://github.com/libgdx/libgdx/wiki/Texture-packer) open source texture packer, as an alternative to the **CodeAndWeb** application. 
 
 #### Design
-Ideas for the architecture and design were shamelessly taken from the phenomenal [Game Programming Patterns](http://gameprogrammingpatterns.com) online book, by _EA_ developer [@munificentbob](https://twitter.com/intent/user?screen_name=munificentbob), following the path of [Erich Gamma](http://https://en.wikipedia.org/wiki/Erich_Gamma) and cia. Honorable mentions go to the [Component](http://gameprogrammingpatterns.com/component.html) and [State](http://gameprogrammingpatterns.com/state.html) design patterns. Both of them were used in **ninja-rabbit**.
+Ideas for the architecture and design were shamelessly taken from the phenomenal [Game Programming Patterns](http://gameprogrammingpatterns.com) online book, by _EA_ developer [@munificentbob](https://twitter.com/intent/user?screen_name=munificentbob), following the path of [Erich Gamma](http://https://en.wikipedia.org/wiki/Erich_Gamma) and cia. Honorable mentions go to the [Component](http://gameprogrammingpatterns.com/component.html), [State](http://gameprogrammingpatterns.com/state.html) and [Observer](http://gameprogrammingpatterns.com/observer.html) design patterns. All of them were implemented in **ninja-rabbit**.
 
 > **Game Programming Patterns** is a must read. If you think of yourself a game developer or enthusiast, you owe to yourself reading it.
 
