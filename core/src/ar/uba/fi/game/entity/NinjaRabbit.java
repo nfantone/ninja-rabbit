@@ -4,6 +4,7 @@ import ar.uba.fi.game.audio.AudioProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.physics.BodyProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
+import ar.uba.fi.game.player.PlayerStatusProcessor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
@@ -21,17 +22,25 @@ public class NinjaRabbit extends Entity {
 	public static final short RIGHT = 8;
 	public static final short DUCK = 16;
 	public static final short DEAD = 32;
+	public static final short COLLECT = 64;
 
 	/**
-	 * A component used to change the body of this {@link Entity} according this the action being
-	 * executed, if necessary.
+	 * A component used to change the body of this {@link Entity} according the action being
+	 * executed or the {@link Direction} that is facing, if necessary.
 	 */
-	protected final BodyProcessor bodyProcessor;
+	private final BodyProcessor bodyProcessor;
 
-	public NinjaRabbit(final BodyProcessor bodyProcessor, final GraphicsProcessor graphics, final PhysicsProcessor physics,
+	/**
+	 * A component that handles the score, lives and other player-related data.
+	 */
+	private final PlayerStatusProcessor player;
+
+	public NinjaRabbit(final PlayerStatusProcessor player, final BodyProcessor bodyProcessor, final GraphicsProcessor graphics,
+			final PhysicsProcessor physics,
 			final AudioProcessor audio) {
 		super(graphics, physics, audio);
 		this.bodyProcessor = bodyProcessor;
+		this.player = player;
 	}
 
 	/*
@@ -43,5 +52,7 @@ public class NinjaRabbit extends Entity {
 	public void update(final Batch batch) {
 		bodyProcessor.update(this);
 		super.update(batch);
+		player.update(this);
 	}
+
 }

@@ -50,11 +50,23 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 		return create(world, bdef, direction);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
+	 * com.badlogic.gdx.physics.box2d.BodyDef)
+	 */
 	@Override
 	public Body create(final World world, final BodyDef definition) {
 		return create(world, definition, Direction.RIGHT);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
+	 * com.badlogic.gdx.physics.box2d.BodyDef, ar.uba.fi.game.entity.Direction)
+	 */
 	@Override
 	public Body create(final World world, final BodyDef definition, final Direction direction) {
 		Body rabbitBody = world.createBody(definition);
@@ -64,7 +76,6 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 		footSensor.setUserData(NinjaRabbitPhysicsProcessor.FOOT_IDENTIFIER);
 		footSensor.setSensor(true);
 
-		rabbitBody.setUserData(RABBIT_IDENTIFIER);
 		return rabbitBody;
 	}
 }

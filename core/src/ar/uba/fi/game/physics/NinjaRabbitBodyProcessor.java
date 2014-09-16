@@ -35,7 +35,9 @@ public class NinjaRabbitBodyProcessor implements BodyProcessor {
 	public void update(final Entity character) {
 		if (character.getBody() == null) {
 			character.setDirection(Direction.RIGHT);
-			character.setBody(bodyFactory.create(world, Direction.RIGHT));
+			Body body = bodyFactory.create(world, Direction.RIGHT);
+			character.setBody(body);
+			body.setUserData(character);
 			lastKnownDirection = Direction.RIGHT;
 		} else {
 			if (!lastKnownDirection.equals(character.getDirection())) {
@@ -63,6 +65,7 @@ public class NinjaRabbitBodyProcessor implements BodyProcessor {
 		newBody.setTransform(position, angle);
 		newBody.setLinearVelocity(velocity);
 		character.setBody(newBody);
+		newBody.setUserData(character);
 
 		lastKnownDirection = character.getDirection();
 	}

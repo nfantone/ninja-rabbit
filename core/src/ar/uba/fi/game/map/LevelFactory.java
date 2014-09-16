@@ -28,7 +28,8 @@ public final class LevelFactory {
 	/**
 	 * Loads a tiled map described by the given <code>.tmx</code> file. Loads objects as Box2D
 	 * bodies and fixtures as a {@link Box2DMapObjectParser} would. Creates
-	 * {@link CollectibleRenderer} for collectible layers.
+	 * {@link CollectibleRenderer} for collectible layers (every layer which name starts with
+	 * "collectible").
 	 *
 	 * @param world
 	 *            The Box2D {@link World} used to create bodies and fixtures from objects layers in
