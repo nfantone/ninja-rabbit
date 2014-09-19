@@ -5,9 +5,11 @@ package ar.uba.fi.game.map;
 
 import net.dermetfan.utils.libgdx.box2d.Box2DMapObjectParser;
 import ar.uba.fi.game.AssetSystem;
+import ar.uba.fi.game.physics.BodyEditorLoader;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -44,16 +46,18 @@ public final class LevelFactory {
 	 *
 	 * @return A new {@link LevelRenderer}, ready to render the map, its bodies and collectibles.
 	 */
-	public static LevelRenderer create(final World world, final AssetManager assets, final String filename, final float unitScale) {
+	public static LevelRenderer create(final World world, final BodyEditorLoader loader, final Batch batch,
+			final AssetManager assets, final String filename,
+			final float unitScale) {
 		TiledMap tiledMap = new TmxMapLoader().load(filename);
 		Box2DMapObjectParser objectParser = new Box2DMapObjectParser(unitScale);
 		objectParser.load(world, tiledMap);
-		LevelRenderer renderer = new LevelRenderer(tiledMap, unitScale);
+		LevelRenderer renderer = new LevelRenderer(tiledMap, batch, unitScale);
 
 		for (MapLayer ml : tiledMap.getLayers()) {
 			if (ml.getName().startsWith(COLLECTIBLES_LAYER)) {
 				CollectibleRenderer carrots = new CollectibleRenderer(unitScale);
-				carrots.load(world, assets, ml);
+				carrots.load(world, loader, assets, ml);
 				renderer.addCollectibleRenderer(carrots);
 			}
 		}

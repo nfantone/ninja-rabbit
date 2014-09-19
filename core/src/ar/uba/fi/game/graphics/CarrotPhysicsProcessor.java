@@ -33,19 +33,16 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 
 	@Override
 	public void endContact(final Contact contact) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void preSolve(final Contact contact, final Manifold oldManifold) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void postSolve(final Contact contact, final ContactImpulse impulse) {
-		// TODO Auto-generated method stub
 
 	}
 

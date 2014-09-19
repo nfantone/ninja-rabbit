@@ -18,15 +18,15 @@ public class AssetSystem extends AssetManager {
 	public static final AssetDescriptor<Sound> CRUNCH_FX = new AssetDescriptor<>("sfx" + File.separator + "crunch.ogg",
 			Sound.class);
 
-	public static AssetDescriptor<TextureAtlas> NINJA_RABBIT_ATLAS = new AssetDescriptor<>("ninja-rabbit.pack",
+	public static final AssetDescriptor<TextureAtlas> NINJA_RABBIT_ATLAS = new AssetDescriptor<>("ninja-rabbit.pack",
 			TextureAtlas.class);
 
-	public static AssetDescriptor<Music> NINJA_RABBIT_THEME = new AssetDescriptor<>("sfx" + File.separator + "theme.ogg",
+	public static final AssetDescriptor<Music> NINJA_RABBIT_THEME = new AssetDescriptor<>("sfx" + File.separator + "theme.ogg",
 			Music.class);
 
-	public static AssetDescriptor<Sound> JUMP_FX = new AssetDescriptor<>("sfx" + File.separator + "jump.ogg",
+	public static final AssetDescriptor<Sound> JUMP_FX = new AssetDescriptor<>("sfx" + File.separator + "jump.ogg",
 			Sound.class);
 
-	public static AssetDescriptor<BitmapFont> HUD_FONT = new AssetDescriptor<>("font" + File.separator + "last-ninja.fnt",
+	public static final AssetDescriptor<BitmapFont> HUD_FONT = new AssetDescriptor<>("font" + File.separator + "last-ninja.fnt",
 			BitmapFont.class);
 }

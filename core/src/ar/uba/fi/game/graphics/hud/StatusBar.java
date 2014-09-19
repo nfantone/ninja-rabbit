@@ -24,6 +24,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  *
  */
 public class StatusBar implements PlayerStatusObserver {
+	private static final String THREE_DIGITS = "%03d";
+	private static final String EIGHT_DIGITS = "%08d";
+	private static final String TWO_DIGITS = "%02d";
 	private static final String NUMBER_GLYPHS = "0123456789";
 	private static final String TIME_REGION = "time";
 	private static final String LIVES_REGION = "lives";
@@ -37,10 +40,10 @@ public class StatusBar implements PlayerStatusObserver {
 
 	@Override
 	public void onPlayerStatusChange(final PlayerStatusEvent event) {
-		collectiblesLabel.setText(String.format("%02d", event.getCollectibles()));
-		scoreLabel.setText(String.format("%08d", event.getScore()));
-		timeLabel.setText(String.format("%03d", event.getTime()));
-		livesLabel.setText(String.format("%02d", event.getLives()));
+		collectiblesLabel.setText(String.format(TWO_DIGITS, event.getCollectibles()));
+		scoreLabel.setText(String.format(EIGHT_DIGITS, event.getScore()));
+		timeLabel.setText(String.format(THREE_DIGITS, event.getTime()));
+		livesLabel.setText(String.format(TWO_DIGITS, event.getLives()));
 	}
 
 	public StatusBar(final Batch batch, final AssetManager assets) {
@@ -51,10 +54,10 @@ public class StatusBar implements PlayerStatusObserver {
 		style.font = assets.get(AssetSystem.HUD_FONT);
 		style.font.setFixedWidthGlyphs(NUMBER_GLYPHS);
 
-		collectiblesLabel = new Label(String.format("%02d", 0), style);
-		livesLabel = new Label(String.format("%02d", 0), style);
-		scoreLabel = new Label(String.format("%08d", 0), style);
-		timeLabel = new Label(String.format("%03d", 0), style);
+		collectiblesLabel = new Label(String.format(TWO_DIGITS, 0), style);
+		livesLabel = new Label(String.format(TWO_DIGITS, 0), style);
+		scoreLabel = new Label(String.format(EIGHT_DIGITS, 0), style);
+		timeLabel = new Label(String.format(THREE_DIGITS, 0), style);
 
 		TextureAtlas hudAtlas = assets.get(AssetSystem.NINJA_RABBIT_ATLAS);
 

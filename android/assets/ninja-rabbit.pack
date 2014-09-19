@@ -1,6 +1,6 @@
 ninja-rabbit.png
 format: RGBA4444
-filter: Linear,Linear
+filter: MipMapLinearNearest,Nearest
 repeat: none
 walk
   rotate: false

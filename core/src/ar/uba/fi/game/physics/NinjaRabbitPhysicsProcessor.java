@@ -34,7 +34,7 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.PhysicsProcessor#update()
 	 */
 	@Override
@@ -65,21 +65,11 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 		if (FOOT_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
 				FOOT_IDENTIFIER.equals(contact.getFixtureB().getUserData()) &&
 				(GROUND_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-						GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
+				GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
 			groundContacts++;
 		}
 
-		if (RIGHT_SENSOR_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-				RIGHT_SENSOR_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			rightContacts++;
-		}
-
-		if (LEFT_SENSOR_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-				LEFT_SENSOR_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			leftContacts++;
-		}
-
-		// Player had picked a carrot
+		// Player has picked a carrot
 		if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
 			((NinjaRabbit) contact.getFixtureB().getBody().getUserData()).execute(NinjaRabbit.COLLECT);
 		} else if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
@@ -93,18 +83,8 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 		if (FOOT_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
 				FOOT_IDENTIFIER.equals(contact.getFixtureB().getUserData()) &&
 				(GROUND_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-						GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
+				GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
 			groundContacts--;
-		}
-
-		if (RIGHT_SENSOR_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-				RIGHT_SENSOR_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			rightContacts--;
-		}
-
-		if (LEFT_SENSOR_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
-				LEFT_SENSOR_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			leftContacts--;
 		}
 	}
 

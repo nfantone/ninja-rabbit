@@ -8,7 +8,7 @@ import net.dermetfan.utils.libgdx.graphics.AnimatedBox2DSprite;
 import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
 import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
 import ar.uba.fi.game.AssetSystem;
-import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
@@ -30,7 +30,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	// private static final String DUCK_REGION = "duck";
-	private static final Vector2 RESPAWN_POSITION = new Vector2(70 / FiubaGame.PPM, 150 / FiubaGame.PPM);
+	private static final Vector2 RESPAWN_POSITION = new Vector2(70 / NinjaRabbitGame.PPM, 150 / NinjaRabbitGame.PPM);
 
 	private final TextureAtlas textureAtlas;
 	private final Box2DSprite standingSprite;
@@ -46,27 +46,27 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		Array<Sprite> walkingSprites = textureAtlas.createSprites(WALK_REGION);
 		standingSprite = new Box2DSprite(walkingSprites.first());
 		standingSprite.setAdjustSize(false);
-		standingSprite.setSize(standingSprite.getWidth() / FiubaGame.PPM,
-				standingSprite.getHeight() / FiubaGame.PPM);
+		standingSprite.setSize(standingSprite.getWidth() / NinjaRabbitGame.PPM,
+				standingSprite.getHeight() / NinjaRabbitGame.PPM);
 
 		Animation animation = new Animation(1 / 12.0f, walkingSprites, PlayMode.LOOP);
 		walkRightSprite = new AnimatedBox2DSprite(new AnimatedSprite(animation));
 		walkRightSprite.setAdjustSize(false);
-		walkRightSprite.setSize(walkRightSprite.getWidth() / FiubaGame.PPM,
-				walkRightSprite.getHeight() / FiubaGame.PPM);
+		walkRightSprite.setSize(walkRightSprite.getWidth() / NinjaRabbitGame.PPM,
+				walkRightSprite.getHeight() / NinjaRabbitGame.PPM);
 
 		animation = new Animation(1 / 12.0f, textureAtlas.createSprites(WALK_REGION), PlayMode.LOOP);
 		walkLeftSprite = new AnimatedBox2DSprite(new AnimatedSprite(animation));
 		walkLeftSprite.flipFrames(true, false, true);
 		walkLeftSprite.setAdjustSize(false);
-		walkLeftSprite.setSize(walkLeftSprite.getWidth() / FiubaGame.PPM,
-				walkLeftSprite.getHeight() / FiubaGame.PPM);
+		walkLeftSprite.setSize(walkLeftSprite.getWidth() / NinjaRabbitGame.PPM,
+				walkLeftSprite.getHeight() / NinjaRabbitGame.PPM);
 
 		animation = new Animation(1 / 10.0f, textureAtlas.createSprites(JUMP_REGION));
 		jumpSprite = new AnimatedBox2DSprite(new AnimatedSprite(animation));
 		jumpSprite.setAdjustSize(false);
-		jumpSprite.setSize(jumpSprite.getWidth() / FiubaGame.PPM,
-				jumpSprite.getHeight() / FiubaGame.PPM);
+		jumpSprite.setSize(jumpSprite.getWidth() / NinjaRabbitGame.PPM,
+				jumpSprite.getHeight() / NinjaRabbitGame.PPM);
 
 		// Array<Sprite> duckSprites = textureAtlas.createSprites(DUCK_REGION);
 		//

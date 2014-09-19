@@ -5,7 +5,6 @@ import ar.uba.fi.game.entity.Collectible;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 
@@ -16,14 +15,16 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class LevelRenderer {
-	private final TiledMapRenderer renderer;
+	private final OrthogonalTiledMapRenderer renderer;
 	private final TiledMap tiledMap;
 	private final Array<CollectibleRenderer> collectibles;
+	private final Batch batch;
 
-	public LevelRenderer(final TiledMap map, final float unitScale) {
+	public LevelRenderer(final TiledMap map, final Batch batch, final float unitScale) {
 		collectibles = new Array<>(3);
 		this.tiledMap = map;
-		renderer = new OrthogonalTiledMapRenderer(map, unitScale);
+		this.batch = batch;
+		renderer = new OrthogonalTiledMapRenderer(map, unitScale, batch);
 	}
 
 	public void addCollectibleRenderer(final CollectibleRenderer renderer) {
@@ -48,11 +49,10 @@ public class LevelRenderer {
 	 * @param batch
 	 *            The {@link Batch} used to draw the sprites of the {@link Collectible}.
 	 */
-	public void update(final Batch batch) {
+	public void update() {
 		for (CollectibleRenderer collectible : collectibles) {
-			collectible.update(batch);
+			collectible.update(batch, renderer.getViewBounds());
 		}
-
 	}
 
 	public TiledMap getTiledMap() {

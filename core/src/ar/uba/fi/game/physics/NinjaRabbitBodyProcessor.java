@@ -18,17 +18,17 @@ public class NinjaRabbitBodyProcessor implements BodyProcessor {
 	private final World world;
 	private Direction lastKnownDirection;
 
-	public NinjaRabbitBodyProcessor(final World world) {
+	public NinjaRabbitBodyProcessor(final World world, final BodyEditorLoader loader) {
 		if (world == null) {
 			throw new IllegalArgumentException("'world' cannot be null");
 		}
-		this.bodyFactory = new NinjaRabbitBodyFactory();
+		this.bodyFactory = new NinjaRabbitBodyFactory(loader);
 		this.world = world;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyProcessor#update(ar.uba.fi.game.entity.Entity)
 	 */
 	@Override

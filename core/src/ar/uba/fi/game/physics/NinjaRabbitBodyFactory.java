@@ -1,9 +1,8 @@
 package ar.uba.fi.game.physics;
 
-import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -17,8 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public final class NinjaRabbitBodyFactory implements BodyFactory {
-	private static final float NINJA_RABBIT_SCALE = 186 / FiubaGame.PPM;
-	private static final String NINJA_RABBIT_BODY_DEF_FILE = "ninja-rabbit.json";
+	private static final float NINJA_RABBIT_SCALE = 186 / NinjaRabbitGame.PPM;
 	private static final int FOOT_FIXTURE_INDEX = 9;
 	private static final String RABBIT_IDENTIFIER = "rabbit";
 
@@ -26,8 +24,11 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 	private final BodyDef bdef;
 	private final FixtureDef fdef;
 
-	public NinjaRabbitBodyFactory() {
-		loader = new BodyEditorLoader(Gdx.files.internal(NINJA_RABBIT_BODY_DEF_FILE));
+	public NinjaRabbitBodyFactory(final BodyEditorLoader loader) {
+		if (loader == null) {
+			throw new IllegalArgumentException("'loader' cannot be null");
+		}
+		this.loader = loader;
 
 		bdef = new BodyDef();
 		bdef.type = BodyType.DynamicBody;
@@ -41,7 +42,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * ar.uba.fi.game.entity.Direction)
 	 */
@@ -52,7 +53,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * com.badlogic.gdx.physics.box2d.BodyDef)
 	 */
@@ -63,7 +64,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * com.badlogic.gdx.physics.box2d.BodyDef, ar.uba.fi.game.entity.Direction)
 	 */

@@ -1,10 +1,9 @@
 package ar.uba.fi.game.physics;
 
-import ar.uba.fi.game.FiubaGame;
+import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
 import ar.uba.fi.game.graphics.CarrotPhysicsProcessor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -17,15 +16,17 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public final class CarrotBodyFactory implements BodyFactory {
-	private static final float CARROT_SCALE = 61 / FiubaGame.PPM;
-	private static final String CARROT_BODY_DEF_FILE = "carrot.json";
+	private static final float CARROT_SCALE = 61 / NinjaRabbitGame.PPM;
 
 	private final BodyEditorLoader loader;
 	private final BodyDef bdef;
 	private final FixtureDef fdef;
 
-	public CarrotBodyFactory() {
-		loader = new BodyEditorLoader(Gdx.files.internal(CARROT_BODY_DEF_FILE));
+	public CarrotBodyFactory(final BodyEditorLoader loader) {
+		if (loader == null) {
+			throw new IllegalArgumentException("'loader' cannot be null");
+		}
+		this.loader = loader;
 
 		bdef = new BodyDef();
 		bdef.type = BodyType.DynamicBody;
@@ -38,7 +39,7 @@ public final class CarrotBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * ar.uba.fi.game.entity.Direction)
 	 */
