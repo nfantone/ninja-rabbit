@@ -74,7 +74,8 @@ public final class EntityFactory {
 	 *            A {@link BodyEditorLoader} to handle creation of the Entity body and fixtures.
 	 * @param assets
 	 *            The {@link AssetManager} from where to extract the graphical and audio resources.
-	 *            Those resources should be loaded in the manager before calling this method.
+	 *            Those resources should be loaded in the manager before calling this method and
+	 *            won't be disposed.
 	 * @param observers
 	 *            An array of event receivers. Events will fire when the active player status
 	 *            changes (such as losing lives, collecting items, etc.).

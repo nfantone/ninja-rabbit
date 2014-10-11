@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="21" height="10" tilewidth="35" tileheight="35">
+ <tileset firstgid="1" name="tiles" tilewidth="70" tileheight="70" spacing="2" margin="2">
+  <image source="tiles.png" width="1874" height="434"/>
+ </tileset>
+ <objectgroup name="bodies" width="21" height="10">
+  <object name="environment" type="object" x="0" y="279">
+   <polyline points="0,0 0,-279"/>
+  </object>
+  <object name="ground" type="fixture" x="210" y="280">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 -210,0"/>
+  </object>
+  <object name="ground" type="fixture" x="350" y="280">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 210,0"/>
+  </object>
+  <object name="ground" type="fixture" x="665" y="280">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 70,0"/>
+  </object>
+ </objectgroup>
+ <layer name="background" width="21" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4B6IIlE9Zk0cQX9AQC0QADM
+  </data>
+ </layer>
+ <layer name="foreground" width="21" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2BkAW4orYZGowMVNPkoPGYBADH8AQc=
+  </data>
+ </layer>
+</map>

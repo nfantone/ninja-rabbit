@@ -23,6 +23,7 @@ public class NinjaRabbit extends Entity {
 	public static final short DUCK = 16;
 	public static final short DEAD = 32;
 	public static final short COLLECT = 64;
+	public static final short GAME_OVER = 128;
 
 	/**
 	 * A component used to change the body of this {@link Entity} according the action being
@@ -45,7 +46,7 @@ public class NinjaRabbit extends Entity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.Entity#update(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override

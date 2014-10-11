@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 
 /**
  * Base class for every {@link Screen} in the game. Holds a reference to the main game instance.
- * 
+ *
  * @author nfantone
  *
  */
@@ -17,6 +17,6 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public void hide() {
-		dispose();
+		// dispose();
 	}
 }

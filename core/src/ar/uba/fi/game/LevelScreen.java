@@ -5,6 +5,7 @@ package ar.uba.fi.game;
 
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.EntityFactory;
+import ar.uba.fi.game.entity.NinjaRabbit;
 import ar.uba.fi.game.graphics.BoundedCamera;
 import ar.uba.fi.game.graphics.hud.StatusBar;
 import ar.uba.fi.game.map.LevelFactory;
@@ -23,10 +24,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  *
  */
 public class LevelScreen extends AbstractScreen {
+	private static final float GRAVITY = -9.8f;
 	private static final String BODIES_DEFINITION_FILE = "bodies.json";
-	private static final String LEVEL_MAP_FILE = "level.tmx";
+	private static final String LEVEL_MAP_FILE = "level2.tmx";
 
-	private static final float TIME_STEP = 1 / 45f;
+	private static final float TIME_STEP = 1 / 300f;
+	private static final int POSITION_ITERATIONS = 3;
+	private static final int VELOCITY_ITERATIONS = 8;
 
 	private final World world;
 	private final ScreenViewport viewport;
@@ -34,25 +38,28 @@ public class LevelScreen extends AbstractScreen {
 	private final Entity ninjaRabbit;
 	private final LevelRenderer mapRenderer;
 	private final StatusBar hud;
+	private final GameOverOverlay gameOver;
+	private float accumulator;
 
 	public LevelScreen(final NinjaRabbitGame game) {
 		super(game);
 
-		world = new World(new Vector2(0.0f, -9.8f), true);
-
+		world = new World(new Vector2(0.0f, GRAVITY), true);
 		hud = new StatusBar(game.getBatch(), game.getAssetsManager());
 
 		BodyEditorLoader bodyLoader = new BodyEditorLoader(Gdx.files.internal(BODIES_DEFINITION_FILE));
 		ninjaRabbit = EntityFactory.createNinjaRabbit(world, bodyLoader, game.getAssetsManager(), hud);
 		mapRenderer = LevelFactory.create(world, bodyLoader, game.getBatch(), game.getAssetsManager(), LEVEL_MAP_FILE,
 				1 / NinjaRabbitGame.PPM);
-
 		viewport = new ScreenViewport();
 		viewport.setUnitsPerPixel(1 / NinjaRabbitGame.PPM);
-		viewport.setCamera(new BoundedCamera(0.0f, mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
-				* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue() / NinjaRabbitGame.PPM));
+		viewport.setCamera(new BoundedCamera(0.0f,
+				mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
+						* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue()
+						/ NinjaRabbitGame.PPM));
 
 		b2dRenderer = new Box2DDebugRenderer();
+		gameOver = new GameOverOverlay(game);
 	}
 
 	/*
@@ -62,11 +69,15 @@ public class LevelScreen extends AbstractScreen {
 	 */
 	@Override
 	public void render(final float delta) {
-		world.step(TIME_STEP, 8, 3);
+		float frameTime = Math.min(delta, 0.25f);
+		accumulator += frameTime;
+		while (accumulator >= TIME_STEP) {
+			world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+			accumulator -= TIME_STEP;
+		}
 
 		viewport.getCamera().position.x = ninjaRabbit.getBody() == null ? 0.0f :
-				ninjaRabbit.getBody().getPosition().x
-						+ viewport.getWorldWidth() / 4.0f;
+				ninjaRabbit.getBody().getPosition().x + viewport.getWorldWidth() / 4.0f;
 		viewport.getCamera().update();
 		game.getBatch().setProjectionMatrix(viewport.getCamera().combined);
 		mapRenderer.render((OrthographicCamera) viewport.getCamera());
@@ -77,6 +88,10 @@ public class LevelScreen extends AbstractScreen {
 		game.getBatch().end();
 
 		hud.render();
+
+		if (ninjaRabbit.isExecuting(NinjaRabbit.GAME_OVER)) {
+			gameOver.render(delta);
+		}
 
 		// b2dRenderer.render(world, viewport.getCamera().combined);
 	}
@@ -90,7 +105,7 @@ public class LevelScreen extends AbstractScreen {
 	public void resize(final int width, final int height) {
 		viewport.update(width, height, true);
 		hud.resize(width, height);
-
+		gameOver.resize(width, height);
 	}
 
 	/*
@@ -136,5 +151,6 @@ public class LevelScreen extends AbstractScreen {
 		b2dRenderer.dispose();
 		world.dispose();
 		hud.dispose();
+		gameOver.dispose();
 	}
 }

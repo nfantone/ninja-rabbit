@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 public class NinjaRabbitGame extends Game {
-	public static final float PPM = 120.0f;
+	public static final float PPM = 92.0f;
 	public static final String GAME_TITLE = "FIUBA | Ninja Rabbit test [fps: %s]";
 
 	private Batch batch;
@@ -26,11 +26,13 @@ public class NinjaRabbitGame extends Game {
 		assetsManager.load(AssetSystem.NINJA_RABBIT_ATLAS);
 		assetsManager.load(AssetSystem.NINJA_RABBIT_THEME);
 		assetsManager.load(AssetSystem.JUMP_FX);
+		assetsManager.load(AssetSystem.GAME_OVER_FX);
 		assetsManager.load(AssetSystem.CRUNCH_FX);
 		assetsManager.load(AssetSystem.HUD_FONT);
+		assetsManager.load(AssetSystem.LEVEL_BACKGROUND);
 		assetsManager.finishLoading();
 
-		setScreen(new LevelScreen(this));
+		setScreen(new LevelStartScreen(this));
 	}
 
 	@Override

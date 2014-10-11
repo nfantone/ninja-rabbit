@@ -6,7 +6,7 @@
  <tileset firstgid="1" name="map" tilewidth="64" tileheight="64">
   <image source="level.png" width="1856" height="64"/>
  </tileset>
- <layer name="background" width="50" height="10" visible="0">
+ <layer name="background" width="50" height="10">
   <data encoding="base64" compression="zlib">
    eJyTYGBgkBjFo3gUj+JRPIpH8ZDGAItJLuE=
   </data>
@@ -19,8 +19,8 @@
  <objectgroup name="bodies" width="50" height="10">
   <object name="ground" type="fixture" x="655" y="639">
    <properties>
+    <property name="" value=""/>
     <property name="body" value="environment"/>
-    <property name="friction" value="0.8"/>
     <property name="restitution" value="0.2"/>
     <property name="userData" value="ground"/>
    </properties>
@@ -28,8 +28,8 @@
   </object>
   <object name="ground" type="fixture" x="1" y="619">
    <properties>
+    <property name="" value=""/>
     <property name="body" value="environment"/>
-    <property name="friction" value="0.8"/>
     <property name="restitution" value="0.2"/>
     <property name="userData" value="ground"/>
    </properties>
@@ -37,9 +37,8 @@
   </object>
   <object name="ground" type="object" x="1744" y="764">
    <properties>
+    <property name="" value=""/>
     <property name="body" value="environment"/>
-    <property name="friction" value="0.8"/>
-    <property name="restitution" value="0.2"/>
     <property name="userData" value="ground"/>
    </properties>
    <polyline points="-2,-128 0,-155 18,-168 1458,-167"/>
@@ -58,6 +57,7 @@
   <object name="platform" type="fixture" x="2112" y="427" width="268" height="21">
    <properties>
     <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
    </properties>
   </object>
  </objectgroup>

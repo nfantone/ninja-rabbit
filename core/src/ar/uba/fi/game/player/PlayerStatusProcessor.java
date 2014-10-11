@@ -47,12 +47,12 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 			status.setScore(status.getScore() + COLLECTIBLE_POINTS);
 			character.stop(NinjaRabbit.COLLECT);
 		} else if (character.isExecuting(NinjaRabbit.DEAD)) {
-			if (status.getLives() > 0) {
+			character.stop(NinjaRabbit.DEAD);
+			if (status.getLives() > 1) {
 				status.setLives((short) (status.getLives() - 1));
 			} else {
-				// TODO Game over.
+				character.execute(NinjaRabbit.GAME_OVER);
 			}
-			character.stop(NinjaRabbit.DEAD);
 		}
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
@@ -65,21 +65,22 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * ar.uba.fi.game.player.PlayerStatusSubject#addObserver(ar.uba.fi.game.player.PlayerStatusObserver
 	 * )
 	 */
 	@Override
 	public void addObserver(final PlayerStatusObserver observer) {
-		if (observer != null) {
+		if (observer != null && !observers.contains(observer, true)) {
 			observers.add(observer);
+			observer.onPlayerStatusChange(status);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.player.PlayerStatusSubject#removeObserver(ar.uba.fi.game.player.
 	 * PlayerStatusObserver)
 	 */

@@ -1,6 +1,6 @@
 package ar.uba.fi.game.graphics;
 
-import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.entity.Entity;
 

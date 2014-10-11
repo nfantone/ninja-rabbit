@@ -3,12 +3,10 @@
  */
 package ar.uba.fi.game.map;
 
-import net.dermetfan.utils.libgdx.box2d.Box2DMapObjectParser;
-import ar.uba.fi.game.AssetSystem;
+import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 import ar.uba.fi.game.physics.BodyEditorLoader;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -36,6 +34,9 @@ public final class LevelFactory {
 	 * @param world
 	 *            The Box2D {@link World} used to create bodies and fixtures from objects layers in
 	 *            the map.
+	 * @param loader
+	 * @param batch
+	 *            A {@link Batch} to use while rendering tiles.
 	 * @param assets
 	 *            {@link AssetManager} from where to get audio and graphics resources for the
 	 *            collectibles.
@@ -49,10 +50,11 @@ public final class LevelFactory {
 	public static LevelRenderer create(final World world, final BodyEditorLoader loader, final Batch batch,
 			final AssetManager assets, final String filename,
 			final float unitScale) {
-		TiledMap tiledMap = new TmxMapLoader().load(filename);
+		TiledMap tiledMap = new TmxMapLoader().load(filename);// new
+		// TmxMapLoader().load(filename);
 		Box2DMapObjectParser objectParser = new Box2DMapObjectParser(unitScale);
 		objectParser.load(world, tiledMap);
-		LevelRenderer renderer = new LevelRenderer(tiledMap, batch, unitScale);
+		LevelRenderer renderer = new LevelRenderer(tiledMap, assets, batch, unitScale);
 
 		for (MapLayer ml : tiledMap.getLayers()) {
 			if (ml.getName().startsWith(COLLECTIBLES_LAYER)) {
@@ -62,11 +64,12 @@ public final class LevelFactory {
 			}
 		}
 
-		Music theme = assets.get(tiledMap.getProperties().get(MUSIC_PROPERTY, AssetSystem.NINJA_RABBIT_THEME.fileName, String.class),
-				Music.class);
-		theme.setVolume(0.5f);
-		theme.setLooping(true);
-		theme.play();
+		// Music theme = assets.get(tiledMap.getProperties().get(MUSIC_PROPERTY,
+		// AssetSystem.NINJA_RABBIT_THEME.fileName, String.class),
+		// Music.class);
+		// theme.setVolume(0.5f);
+		// theme.setLooping(true);
+		// theme.play();
 
 		return renderer;
 	}

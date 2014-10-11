@@ -1,129 +1,129 @@
 ninja-rabbit.png
-format: RGBA8888
-filter: Linear,Linear
+format: RGBA4444
+filter: MipMapLinearNearest,Nearest
 repeat: none
 walk
   rotate: false
-  xy: 105, 2
-  size: 101, 164
-  orig: 101, 164
+  xy: 190, 306
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 1
 walk
   rotate: false
-  xy: 2, 2
-  size: 101, 164
-  orig: 101, 164
+  xy: 388, 2
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 5
 jump
   rotate: false
-  xy: 208, 2
-  size: 101, 164
-  orig: 101, 164
+  xy: 2, 610
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 1
 jump
   rotate: false
-  xy: 105, 334
-  size: 101, 164
-  orig: 101, 164
+  xy: 566, 306
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 5
 walk
   rotate: false
-  xy: 105, 168
-  size: 101, 164
-  orig: 101, 164
+  xy: 378, 306
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 0
 walk
   rotate: false
-  xy: 2, 168
-  size: 101, 164
-  orig: 101, 164
+  xy: 576, 2
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 4
 jump
   rotate: false
-  xy: 412, 330
-  size: 101, 160
-  orig: 101, 160
+  xy: 195, 2
+  size: 191, 302
+  orig: 191, 302
   offset: 0, 0
   index: 2
 jump
   rotate: false
-  xy: 412, 168
-  size: 101, 160
-  orig: 101, 160
+  xy: 2, 2
+  size: 191, 302
+  orig: 191, 302
   offset: 0, 0
   index: 6
 walk
   rotate: false
-  xy: 309, 168
-  size: 101, 163
-  orig: 101, 163
+  xy: 566, 610
+  size: 186, 301
+  orig: 186, 301
   offset: 0, 0
   index: 3
 carrot-small
   rotate: false
-  xy: 364, 399
+  xy: 764, 124
   size: 40, 42
   orig: 40, 42
   offset: 0, 0
   index: -1
 time
   rotate: false
-  xy: 375, 333
+  xy: 764, 168
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 jump
   rotate: false
-  xy: 208, 168
-  size: 99, 164
-  orig: 99, 164
+  xy: 754, 610
+  size: 183, 302
+  orig: 183, 302
   offset: 0, 0
   index: 3
 carrot
   rotate: false
-  xy: 311, 399
+  xy: 764, 68
   size: 51, 54
   orig: 51, 54
   offset: 0, 0
   index: -1
 walk
   rotate: false
-  xy: 2, 334
-  size: 101, 164
-  orig: 101, 164
+  xy: 2, 306
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 2
 walk
   rotate: false
-  xy: 208, 334
-  size: 101, 163
-  orig: 101, 163
+  xy: 378, 610
+  size: 186, 301
+  orig: 186, 301
   offset: 0, 0
   index: 6
 jump
   rotate: false
-  xy: 311, 2
-  size: 101, 164
-  orig: 101, 164
+  xy: 190, 610
+  size: 186, 302
+  orig: 186, 302
   offset: 0, 0
   index: 0
 jump
   rotate: false
-  xy: 414, 2
-  size: 99, 164
-  orig: 99, 164
+  xy: 754, 306
+  size: 183, 302
+  orig: 183, 302
   offset: 0, 0
   index: 4
 lives
   rotate: false
-  xy: 311, 333
+  xy: 764, 2
   size: 62, 64
   orig: 62, 64
   offset: 0, 0

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="17" height="10" tilewidth="35" tileheight="35">
+ <properties>
+  <property name="atlas" value="tiles_spritesheet.txt"/>
+ </properties>
+ <tileset firstgid="1" name="tiles_spritesheet.2" tilewidth="72" tileheight="72" spacing="2">
+  <image source="tiles_spritesheet.2.png" width="960" height="960"/>
+ </tileset>
+ <layer name="foreground" width="17" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFowA30MGDCaljwKKOXAAA79gCPQ==
+  </data>
+ </layer>
+ <layer name="background" width="17" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2DwAwACqAAB
+  </data>
+ </layer>
+ <objectgroup name="bodies" width="17" height="10">
+  <object name="environment" type="object" x="0" y="560">
+   <polyline points="0,0 0,-560 1190,-560 1190,0"/>
+  </object>
+  <object name="ground" type="fixture" x="0" y="560">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 490,0"/>
+  </object>
+  <object name="ground" type="fixture" x="700" y="560">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 350,0"/>
+  </object>
+  <object name="ground" type="fixture" x="1120" y="560">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 70,0"/>
+  </object>
+ </objectgroup>
+</map>

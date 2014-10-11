@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -29,4 +30,10 @@ public class AssetSystem extends AssetManager {
 
 	public static final AssetDescriptor<BitmapFont> HUD_FONT = new AssetDescriptor<>("font" + File.separator + "last-ninja.fnt",
 			BitmapFont.class);
+
+	public static final AssetDescriptor<Texture> LEVEL_BACKGROUND = new AssetDescriptor<>("bg.png",
+			Texture.class);
+
+	public static final AssetDescriptor<Sound> GAME_OVER_FX = new AssetDescriptor<>("sfx" + File.separator + "game-over.ogg",
+			Sound.class);
 }

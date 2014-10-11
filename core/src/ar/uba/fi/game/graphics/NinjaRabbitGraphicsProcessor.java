@@ -3,10 +3,10 @@
  */
 package ar.uba.fi.game.graphics;
 
-import net.dermetfan.utils.libgdx.box2d.Box2DUtils;
-import net.dermetfan.utils.libgdx.graphics.AnimatedBox2DSprite;
-import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
-import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
+import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
+import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
@@ -30,7 +30,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	// private static final String DUCK_REGION = "duck";
-	private static final Vector2 RESPAWN_POSITION = new Vector2(70 / NinjaRabbitGame.PPM, 150 / NinjaRabbitGame.PPM);
+	private static final Vector2 RESPAWN_POSITION = new Vector2(0.1f, 3.2f);
 
 	private final TextureAtlas textureAtlas;
 	private final Box2DSprite standingSprite;
@@ -94,36 +94,40 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	 */
 	@Override
 	public void draw(final Entity character, final Batch batch) {
-		Box2DSprite frame = null;
+		if (!character.isExecuting(NinjaRabbit.GAME_OVER)) {
+			Box2DSprite frame = null;
 
-		if (character.isExecuting(NinjaRabbit.DEAD)) {
-			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
-			frame = standingSprite;
-			character.setDirection(Direction.RIGHT);
-		} else {
-			if (character.isExecuting(NinjaRabbit.JUMP)) {
-				jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
-				frame = jumpSprite;
-			} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
-				frame = walkRightSprite;
-				character.setDirection(Direction.RIGHT);
-			} else if (character.isExecuting(NinjaRabbit.LEFT)) {
-				frame = walkLeftSprite;
-				character.setDirection(Direction.LEFT);
-			} else if (character.isExecuting(NinjaRabbit.DUCK)) {
-				// frame = duckSprite;
-			} else {
-				standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
+			if (character.isExecuting(NinjaRabbit.DEAD)) {
+				character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
 				frame = standingSprite;
-				// duckSprite.setTime(0.0f);
-				jumpSprite.setTime(0.0f);
+				character.setDirection(Direction.RIGHT);
+			} else {
+				if (character.isExecuting(NinjaRabbit.JUMP)) {
+					jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
+					frame = jumpSprite;
+				} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
+					frame = walkRightSprite;
+					character.setDirection(Direction.RIGHT);
+				} else if (character.isExecuting(NinjaRabbit.LEFT)) {
+					frame = walkLeftSprite;
+					character.setDirection(Direction.LEFT);
+				} else if (character.isExecuting(NinjaRabbit.DUCK)) {
+					// frame = duckSprite;
+				} else {
+					standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
+					frame = standingSprite;
+					// duckSprite.setTime(0.0f);
+					jumpSprite.setTime(0.0f);
+				}
 			}
-		}
-		frame.setPosition(
-				-frame.getWidth() / 2.0f +
-						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
-				-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.53f);
 
-		frame.draw(batch, character.getBody());
+			frame.setPosition(
+					-frame.getWidth() / 2.0f +
+							Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
+									? 2.8f : 1.55f),
+					-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.36f);
+
+			frame.draw(batch, character.getBody());
+		}
 	}
 }

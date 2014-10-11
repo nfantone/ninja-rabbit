@@ -38,14 +38,6 @@ public class StatusBar implements PlayerStatusObserver {
 	private final Label scoreLabel;
 	private final Label timeLabel;
 
-	@Override
-	public void onPlayerStatusChange(final PlayerStatusEvent event) {
-		collectiblesLabel.setText(String.format(TWO_DIGITS, event.getCollectibles()));
-		scoreLabel.setText(String.format(EIGHT_DIGITS, event.getScore()));
-		timeLabel.setText(String.format(THREE_DIGITS, event.getTime()));
-		livesLabel.setText(String.format(TWO_DIGITS, event.getLives()));
-	}
-
 	public StatusBar(final Batch batch, final AssetManager assets) {
 		overlay = new Stage(new ScreenViewport(), batch);
 
@@ -74,7 +66,14 @@ public class StatusBar implements PlayerStatusObserver {
 		table.pad(15.0f);
 
 		overlay.addActor(table);
+	}
 
+	@Override
+	public void onPlayerStatusChange(final PlayerStatusEvent event) {
+		collectiblesLabel.setText(String.format(TWO_DIGITS, event.getCollectibles()));
+		scoreLabel.setText(String.format(EIGHT_DIGITS, event.getScore()));
+		timeLabel.setText(String.format(THREE_DIGITS, event.getTime()));
+		livesLabel.setText(String.format(TWO_DIGITS, event.getLives()));
 	}
 
 	public void resize(final int width, final int height) {

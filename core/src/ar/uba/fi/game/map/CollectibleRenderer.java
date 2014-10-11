@@ -60,7 +60,7 @@ public class CollectibleRenderer {
 			BodyFactory bodyFactory = null;
 			Entity entity = null;
 
-			switch (mo.getProperties().get(TYPE_PROPERTY, String.class)) {
+			switch (mo.getProperties().get(TYPE_PROPERTY, CARROT_TYPE, String.class)) {
 			case CARROT_TYPE:
 				bodyFactory = new CarrotBodyFactory(loader);
 				entity = EntityFactory.createCollectible(world, assets);

@@ -15,8 +15,10 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class NinjaRabbitAudioProcessor implements AudioProcessor {
 	private static final int MAX_JUMP_TIMEOUT = 35;
+	private static final int MAX_GAME_OVER_TIMEOUT = 600;
 	private final AssetManager assets;
 	private int jumpTimeout;
+	private int gameOverTimeout;
 	private long jumpFxId;
 
 	public NinjaRabbitAudioProcessor(final AssetManager assets) {
@@ -25,7 +27,7 @@ public class NinjaRabbitAudioProcessor implements AudioProcessor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.audio.AudioProcessor#update(ar.uba.fi.game.entity.Entity)
 	 */
 	@Override
@@ -37,6 +39,14 @@ public class NinjaRabbitAudioProcessor implements AudioProcessor {
 			jumpTimeout = MAX_JUMP_TIMEOUT;
 		} else {
 			jumpTimeout--;
+		}
+
+		if (character.isExecuting(NinjaRabbit.GAME_OVER) && gameOverTimeout < 0) {
+			Sound gameOverFx = assets.get(AssetSystem.GAME_OVER_FX);
+			gameOverFx.play();
+			gameOverTimeout = MAX_GAME_OVER_TIMEOUT;
+		} else {
+			gameOverTimeout--;
 		}
 	}
 
