@@ -4,6 +4,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import ar.uba.fi.game.player.PlayerStatus;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,6 +23,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  *
  */
 public class LevelStartScreen extends AbstractScreen {
+	private static final String THREE_DIGITS = "%03d";
+	private static final String EIGHT_DIGITS = "%08d";
+	private static final String TWO_DIGITS = "%02d";
+	private static final String LIVES_FORMAT = "x " + TWO_DIGITS;
+	private static final String LEVEL_LABEL = "Level";
+	private static final String LEVEL_FORMAT = "%s - %s";
+
 	private static final String TIME_REGION = "time";
 	private static final String LIVES_REGION = "lives";
 	private static final String SMALL_CARROT_REGION = "carrot-small";
@@ -30,6 +38,7 @@ public class LevelStartScreen extends AbstractScreen {
 
 	public LevelStartScreen(final NinjaRabbitGame game) {
 		super(game);
+		PlayerStatus playerStatus = game.getPlayerStatus();
 		stage = new Stage(new ScreenViewport(), game.getBatch());
 
 		Label.LabelStyle style = new Label.LabelStyle();
@@ -38,23 +47,29 @@ public class LevelStartScreen extends AbstractScreen {
 
 		TextureAtlas hudAtlas = game.getAssetsManager().get(AssetSystem.NINJA_RABBIT_ATLAS);
 
+		Label collectiblesLabel = new Label(String.format(TWO_DIGITS, playerStatus.getCollectibles()), style);
+		Label livesLabel = new Label(String.format(LIVES_FORMAT, playerStatus.getLives()), style);
+		Label scoreLabel = new Label(String.format(EIGHT_DIGITS, playerStatus.getScore()), style);
+		Label timeLabel = new Label(String.format(THREE_DIGITS, playerStatus.getTime()), style);
+
 		Table status = new Table();
 		status.add(new Image(hudAtlas.findRegion(SMALL_CARROT_REGION))).padRight(4.0f);
-		status.add(new Label("16", style)).bottom();
-		status.add(new Label("00001600", style)).expandX();
+		status.add(collectiblesLabel).bottom();
+		status.add(scoreLabel).expandX();
 		status.add(new Image(hudAtlas.findRegion(TIME_REGION))).padRight(12.0f);
-		status.add(new Label("300", style)).row();
+		status.add(timeLabel).row();
 		status.setFillParent(true);
 		status.top();
 		status.pad(15.0f);
 		stage.addActor(status);
 
 		Table levelInfo = new Table();
-		levelInfo.add(new Label("Level", style)).expandX().right().padRight(18.0f);
-		levelInfo.add(new Label("1-1", style)).expandX().left().row().padTop(18.0f);
+		levelInfo.add(new Label(LEVEL_LABEL, style)).expandX().right().padRight(18.0f);
+		// TODO Extraer nivel - mundo de PlayerStatus
+		levelInfo.add(new Label(String.format(LEVEL_FORMAT, 1, 1), style)).expandX().left().row().padTop(18.0f);
 		Image livesIcon = new Image(hudAtlas.findRegion(LIVES_REGION));
 		levelInfo.add(livesIcon).expandX().right().spaceRight(25f);
-		levelInfo.add(new Label("x 1", style)).expandX().left().bottom();
+		levelInfo.add(livesLabel).expandX().left().bottom();
 		levelInfo.setFillParent(true);
 		stage.addActor(levelInfo);
 
@@ -78,15 +93,15 @@ public class LevelStartScreen extends AbstractScreen {
 		// Fade in / fade out effect
 		stage.addAction(sequence(fadeIn(0.75f), delay(1.75f), fadeOut(0.35f),
 				new Action() {
-			@Override
-			public boolean act(
-					final float delta)
-			{
-				// Last action will move to the next screen
-				game.setScreen(new LevelScreen(game));
-				return true;
-			}
-		}));
+					@Override
+					public boolean act(
+							final float delta)
+					{
+						// Last action will move to the next screen
+						game.setScreen(new LevelScreen(game));
+						return true;
+					}
+				}));
 	}
 
 	@Override

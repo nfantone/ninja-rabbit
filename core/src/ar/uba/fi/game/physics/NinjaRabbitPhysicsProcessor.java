@@ -7,6 +7,7 @@ import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 import ar.uba.fi.game.graphics.CarrotPhysicsProcessor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -27,6 +28,7 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 
 	private int groundContacts;
 	private int jumpTimeout;
+	private float stillTime;
 
 	/*
 	 * (non-Javadoc)
@@ -43,11 +45,38 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 				character.execute(NinjaRabbit.DEAD);
 			}
 
+			// Cap maximum velocity on X axis
 			if (Math.abs(velocity.x) > MAX_VELOCITY.x) {
 				velocity.x = Math.signum(velocity.x) * MAX_VELOCITY.x;
 				character.getBody().setLinearVelocity(velocity);
+				velocity = character.getBody().getLinearVelocity();
 			}
 
+			// Linear velocity dampening
+			if (!character.isExecuting(NinjaRabbit.LEFT) &&
+					!character.isExecuting(NinjaRabbit.RIGHT)) {
+				velocity = character.getBody().getLinearVelocity();
+				stillTime += Gdx.graphics.getDeltaTime();
+				character.getBody().setLinearVelocity(velocity.x * 0.9f, velocity.y);
+			} else {
+				stillTime = 0.0f;
+			}
+
+			// Disable friction if character is not ground
+			float newFriction = 0.05f;
+			if (groundContacts > 0) {
+				if (!character.isExecuting(NinjaRabbit.LEFT) && !character.isExecuting(NinjaRabbit.RIGHT) && stillTime > 0.2f) {
+					newFriction = 300.0f;
+				} else {
+					newFriction = 0.8f;
+				}
+			}
+
+			for (Fixture f : character.getBody().getFixtureList()) {
+				f.setFriction(newFriction);
+			}
+
+			// Move character left or right
 			if (character.isExecuting(NinjaRabbit.RIGHT) && velocity.x < MAX_VELOCITY.x) {
 				character.getBody().applyLinearImpulse(LINEAR_VELOCITY * character.getBody().getMass(), 0.0f, position.x, position.y, true);
 			} else if (character.isExecuting(NinjaRabbit.LEFT) && velocity.x > -MAX_VELOCITY.x) {
@@ -55,14 +84,12 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 						.applyLinearImpulse(-LINEAR_VELOCITY * character.getBody().getMass(), 0.0f, position.x, position.y, true);
 			}
 
-			if (!character.isExecuting(NinjaRabbit.RIGHT) && !character.isExecuting(NinjaRabbit.LEFT)) {
-				character.getBody().setLinearVelocity(velocity.x * 0.9f, velocity.y);
-			}
-
 			if (character.isExecuting(NinjaRabbit.JUMP) && groundContacts > 0) {
+				position = character.getBody().getPosition();
+
 				// Initial jumping impulse (on ground)
 				character.getBody().setLinearVelocity(velocity.x, 0.0f);
-				position.y += 0.1f;
+				character.getBody().setTransform(position.x, position.y + 0.01f, 0);
 				character.getBody().applyLinearImpulse(0.0f, JUMP_VELOCITY * character.getBody().getMass() + Math.abs(velocity.x) * 0.2f,
 						position.x,
 						position.y, true);
@@ -76,16 +103,6 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 						position.x,
 						position.y, true);
 			}
-
-			if (groundContacts > 0) {
-				for (Fixture f : character.getBody().getFixtureList()) {
-					f.setFriction(0.8f);
-				}
-			} else {
-				for (Fixture f : character.getBody().getFixtureList()) {
-					f.setFriction(0.1f);
-				}
-			}
 		}
 	}
 
@@ -97,6 +114,10 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 				(GROUND_IDENTIFIER.equals(contact.getFixtureA().getUserData()) ||
 				GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
 			groundContacts++;
+			System.out.println("--------------------------------");
+			System.out.println("A:" + contact.getFixtureA().getFriction());
+			System.out.println("B:" + contact.getFixtureB().getFriction());
+			System.out.println(contact.getFriction());
 		}
 
 		// Player has picked up a carrot

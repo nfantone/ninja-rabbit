@@ -5,6 +5,7 @@ import ar.uba.fi.game.entity.Collectible;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -17,12 +18,18 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class LevelRenderer {
+	private static final String BACKGROUND_PROPERTY = "background";
 	private final OrthogonalTiledMapRenderer renderer;
 	private final Array<CollectibleRenderer> collectibles;
 
 	public LevelRenderer(final TiledMap map, final AssetManager assets, final Batch batch, final float unitScale) {
 		collectibles = new Array<>(3);
-		renderer = new BackgroundTiledMapRenderer(map, unitScale, batch, assets.get(AssetSystem.LEVEL_BACKGROUND));
+
+		Texture background = assets.get(map.getProperties().get(BACKGROUND_PROPERTY,
+				AssetSystem.DEFAULT_BACKGROUND.fileName, String.class),
+				Texture.class);
+
+		renderer = new BackgroundTiledMapRenderer(map, unitScale, batch, background);
 	}
 
 	public void addCollectibleRenderer(final CollectibleRenderer renderer) {

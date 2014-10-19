@@ -26,17 +26,31 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 	 * Metadata for the current gaming session of the player (typically displayed in the HUD or
 	 * status bar).
 	 */
-	private final PlayerStatus status;
+	private final CurrentPlayerStatus status;
 	private float elapsedTime;
 	private final Array<PlayerStatusObserver> observers;
 
 	public PlayerStatusProcessor() {
-		status = new PlayerStatus();
+		this(new CurrentPlayerStatus());
+	}
+
+	/**
+	 * Creates a new {@link PlayerStatusProcessor}. This constructor is useful when the management
+	 * of the {@link CurrentPlayerStatus} is a also the responsibility of some other layer or a
+	 * global state.
+	 *
+	 * @param status
+	 *            The instance of {@link CurrentPlayerStatus} that will be used internally by this
+	 *            processor. Be warned that modifications of this instance outside the scope of this
+	 *            class will affect its behavior.
+	 */
+	public PlayerStatusProcessor(final CurrentPlayerStatus status) {
+		this.status = status;
 		observers = new Array<>(2);
 	}
 
 	/**
-	 * Updates the inner {@link PlayerStatus} according to the given {@link Entity} state.
+	 * Updates the inner {@link CurrentPlayerStatus} according to the given {@link Entity} state.
 	 *
 	 * @param character
 	 *            The {@link Entity} whose state is to be evaluated.
@@ -48,9 +62,9 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 			character.stop(NinjaRabbit.COLLECT);
 		} else if (character.isExecuting(NinjaRabbit.DEAD)) {
 			character.stop(NinjaRabbit.DEAD);
-			if (status.getLives() > 1) {
-				status.setLives((short) (status.getLives() - 1));
-			} else {
+			status.setLives((short) (status.getLives() - 1));
+			// No lives left: game over
+			if (status.getLives() < 1) {
 				character.execute(NinjaRabbit.GAME_OVER);
 			}
 		}
@@ -60,12 +74,17 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 			status.setTime((short) (status.getTime() - 1));
 			elapsedTime = 0.0f;
 			notifyObservers();
+
+			// Run out of time: game over
+			if (status.getTime() < 0) {
+				character.execute(NinjaRabbit.GAME_OVER);
+			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * ar.uba.fi.game.player.PlayerStatusSubject#addObserver(ar.uba.fi.game.player.PlayerStatusObserver
 	 * )
@@ -80,7 +99,7 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.player.PlayerStatusSubject#removeObserver(ar.uba.fi.game.player.
 	 * PlayerStatusObserver)
 	 */
@@ -99,5 +118,4 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 			o.onPlayerStatusChange(status);
 		}
 	}
-
 }

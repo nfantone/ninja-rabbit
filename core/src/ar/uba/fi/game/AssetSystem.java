@@ -31,7 +31,13 @@ public class AssetSystem extends AssetManager {
 	public static final AssetDescriptor<BitmapFont> HUD_FONT = new AssetDescriptor<>("font" + File.separator + "last-ninja.fnt",
 			BitmapFont.class);
 
-	public static final AssetDescriptor<Texture> LEVEL_BACKGROUND = new AssetDescriptor<>("bg.png",
+	public static final AssetDescriptor<Texture> DEFAULT_BACKGROUND = new AssetDescriptor<>("bg.png",
+			Texture.class);
+
+	public static final AssetDescriptor<Texture> GRASSLAND_BACKGROUND = new AssetDescriptor<>("bg_grasslands.png",
+			Texture.class);
+
+	public static final AssetDescriptor<Texture> SWORD = new AssetDescriptor<>("sword.png",
 			Texture.class);
 
 	public static final AssetDescriptor<Sound> GAME_OVER_FX = new AssetDescriptor<>("sfx" + File.separator + "game-over.ogg",

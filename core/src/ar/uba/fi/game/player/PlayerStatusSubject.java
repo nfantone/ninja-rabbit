@@ -10,11 +10,11 @@ package ar.uba.fi.game.player;
 public interface PlayerStatusSubject {
 	/**
 	 * Registers a new observer to the list of general {@link PlayerStatusObserver} that are
-	 * watching changes on a certain instance of {@link PlayerStatus}.
+	 * watching changes on a certain instance of {@link CurrentPlayerStatus}.
 	 *
 	 * @param observer
 	 *            The instance of a concrete implementation of {@link PlayerStatusObserver} that
-	 *            will be notified of changes to the {@link PlayerStatus}. If <code>null</code>,
+	 *            will be notified of changes to the {@link CurrentPlayerStatus}. If <code>null</code>,
 	 *            this will have no effect.
 	 */
 	void addObserver(final PlayerStatusObserver observer);

@@ -12,5 +12,5 @@ public interface PlayerStatusObserver {
 	 *
 	 * @param status
 	 */
-	void onPlayerStatusChange(final PlayerStatusEvent event);
+	void onPlayerStatusChange(final PlayerStatus event);
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="80" height="20" tilewidth="35" tileheight="35">
+ <properties>
+  <property name="background" value="bg_grasslands.png"/>
+ </properties>
  <tileset firstgid="1" name="tiles" tilewidth="70" tileheight="70" spacing="2" margin="2">
   <image source="tiles.png" width="1874" height="434"/>
  </tileset>
@@ -48,6 +51,27 @@
   <object x="1013" y="245">
    <ellipse/>
   </object>
+  <object x="1733" y="364">
+   <ellipse/>
+  </object>
+  <object x="1833" y="360">
+   <ellipse/>
+  </object>
+  <object x="1927" y="356">
+   <ellipse/>
+  </object>
+  <object x="1183" y="384">
+   <ellipse/>
+  </object>
+  <object x="1243" y="348">
+   <ellipse/>
+  </object>
+  <object x="1269" y="159">
+   <ellipse/>
+  </object>
+  <object x="1748" y="137">
+   <ellipse/>
+  </object>
  </objectgroup>
  <layer name="foreground" width="80" height="20">
   <data encoding="base64" compression="zlib">
@@ -57,6 +81,7 @@
  <objectgroup name="bodies" width="80" height="20">
   <object name="ground" type="fixture" x="0" y="560">
    <properties>
+    <property name="" value=""/>
     <property name="body" value="environment"/>
     <property name="userData" value="ground"/>
    </properties>

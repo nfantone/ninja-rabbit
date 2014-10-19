@@ -15,11 +15,11 @@ import com.badlogic.gdx.physics.box2d.Body;
  *
  */
 public abstract class Entity {
-
 	/**
 	 * Actions currently being performed by this entity, represented as a stream of bits.
 	 */
 	private short actions;
+
 	/**
 	 * The Box2D {@link Body} containing all physical properties of this entity.
 	 */
@@ -34,6 +34,7 @@ public abstract class Entity {
 	 * A {@link GraphicsProcessor} used to draw the current sprite on the screen.
 	 */
 	private final GraphicsProcessor graphics;
+
 	/**
 	 * A {@link PhysicsProcessor} to handle collisions and movement.
 	 */

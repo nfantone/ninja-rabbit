@@ -20,7 +20,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 	private static final float NINJA_RABBIT_SCALE = 101 / NinjaRabbitGame.PPM;
 	private static final int FOOT_FIXTURE_INDEX = 9;
 	private static final String RABBIT_IDENTIFIER = "rabbit";
-	private static final Vector2 INITIAL_POSITION = new Vector2(0.9f, 2.2f);
+	private static final Vector2 INITIAL_POSITION = new Vector2(1.2f, 2.2f);
 
 	private final BodyEditorLoader loader;
 	private final BodyDef bdef;
@@ -47,7 +47,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * ar.uba.fi.game.entity.Direction)
 	 */
@@ -58,7 +58,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * com.badlogic.gdx.physics.box2d.BodyDef)
 	 */
@@ -69,7 +69,7 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.physics.BodyFactory#create(com.badlogic.gdx.physics.box2d.World,
 	 * com.badlogic.gdx.physics.box2d.BodyDef, ar.uba.fi.game.entity.Direction)
 	 */
@@ -80,7 +80,10 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 		Fixture footSensor = rabbitBody.getFixtureList().get(FOOT_FIXTURE_INDEX);
 		footSensor.setUserData(NinjaRabbitPhysicsProcessor.FOOT_IDENTIFIER);
+		footSensor.setDensity(0.0f);
 		footSensor.setSensor(true);
+
+		rabbitBody.resetMassData();
 
 		return rabbitBody;
 	}

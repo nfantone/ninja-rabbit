@@ -18,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public final class LevelFactory {
-	private static final String MUSIC_PROPERTY = "music";
 	private static final String COLLECTIBLES_LAYER = "collectibles";
 
 	private LevelFactory() {
@@ -50,27 +49,18 @@ public final class LevelFactory {
 	public static LevelRenderer create(final World world, final BodyEditorLoader loader, final Batch batch,
 			final AssetManager assets, final String filename,
 			final float unitScale) {
-		TiledMap tiledMap = new TmxMapLoader().load(filename);// new
-		// TmxMapLoader().load(filename);
+		TiledMap tiledMap = new TmxMapLoader().load(filename);
 		Box2DMapObjectParser objectParser = new Box2DMapObjectParser(unitScale);
 		objectParser.load(world, tiledMap);
 		LevelRenderer renderer = new LevelRenderer(tiledMap, assets, batch, unitScale);
 
 		for (MapLayer ml : tiledMap.getLayers()) {
-			if (ml.getName().startsWith(COLLECTIBLES_LAYER)) {
+			if (ml.getName().toLowerCase().startsWith(COLLECTIBLES_LAYER)) {
 				CollectibleRenderer carrots = new CollectibleRenderer(unitScale);
 				carrots.load(world, loader, assets, ml);
 				renderer.addCollectibleRenderer(carrots);
 			}
 		}
-
-		// Music theme = assets.get(tiledMap.getProperties().get(MUSIC_PROPERTY,
-		// AssetSystem.NINJA_RABBIT_THEME.fileName, String.class),
-		// Music.class);
-		// theme.setVolume(0.5f);
-		// theme.setLooping(true);
-		// theme.play();
-
 		return renderer;
 	}
 }

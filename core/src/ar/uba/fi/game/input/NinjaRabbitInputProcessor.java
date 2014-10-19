@@ -40,7 +40,7 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 			character.execute(NinjaRabbit.RIGHT);
 			break;
 		case DUCK_KEY:
-			character.execute(NinjaRabbit.DUCK);
+			// character.execute(NinjaRabbit.DUCK);
 			break;
 		default:
 			break;
