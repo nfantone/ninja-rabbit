@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="80" height="20" tilewidth="35" tileheight="35">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="20" tilewidth="35" tileheight="35">
  <properties>
   <property name="background" value="bg_grasslands.png"/>
  </properties>
@@ -8,77 +8,44 @@
  </tileset>
  <layer name="background" width="80" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1LENgDAMBMDskj2YgzodNWzA4nQUUVKAIjlS7pqXXNhfOSUAAGAmZ3QBlrY3ZtuAvbmTrOWILvDRHV2AV+93lMF3rioBZuEv/fMAHbYEYw==
+   eJzt1LENgCAQhWHGoHcDR7K0dgM6age20hByhwSJkMv/JeSQwElegXPAXGJSY2mjcCafS9/aGtpYy/JU5q1npB61fUt8hx4W9MgSAKzYR18AeLEo1ScDmE0YfQE88rfjtnX+z5FVzGdVBuqR3XcjsrP0Lv2Z3QV4Rg6h
   </data>
  </layer>
- <objectgroup name="collectibles" width="80" height="20">
-  <object x="278" y="455">
+ <objectgroup name="collectibles">
+  <object x="174" y="523">
    <ellipse/>
   </object>
-  <object x="416" y="382">
+  <object x="627" y="381">
    <ellipse/>
   </object>
-  <object x="1295" y="388">
+  <object x="1294" y="382">
    <ellipse/>
   </object>
-  <object x="1470" y="387">
+  <object x="1468" y="382">
    <ellipse/>
   </object>
-  <object x="1539" y="387">
+  <object x="1539" y="383">
    <ellipse/>
   </object>
-  <object x="2541" y="491">
+  <object x="2168" y="381">
    <ellipse/>
   </object>
-  <object x="2540" y="543">
+  <object x="2345" y="450">
    <ellipse/>
   </object>
-  <object x="2539" y="594">
+  <object x="2410" y="452">
    <ellipse/>
   </object>
-  <object x="2063" y="452">
-   <ellipse/>
-  </object>
-  <object x="2132" y="452">
-   <ellipse/>
-  </object>
-  <object x="337" y="391">
-   <ellipse/>
-  </object>
-  <object x="802" y="245">
-   <ellipse/>
-  </object>
-  <object x="1013" y="245">
-   <ellipse/>
-  </object>
-  <object x="1733" y="364">
-   <ellipse/>
-  </object>
-  <object x="1833" y="360">
-   <ellipse/>
-  </object>
-  <object x="1927" y="356">
-   <ellipse/>
-  </object>
-  <object x="1183" y="384">
-   <ellipse/>
-  </object>
-  <object x="1243" y="348">
-   <ellipse/>
-  </object>
-  <object x="1269" y="159">
-   <ellipse/>
-  </object>
-  <object x="1748" y="137">
+  <object x="2518" y="628">
    <ellipse/>
   </object>
  </objectgroup>
  <layer name="foreground" width="80" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1TEKwkAQheG1UzxCWk1lraWaY5hrBLH0BGJurMUEzcBmJ7OQCP5f85IlzA7ssAkBAADAbiFZzNqFT9f7Xr0DHnqeAGCsw8DaO+8TtjKLk2RpzItzn42x/tVZH79pJRk771qyUbmWPKv1W2bqfXS2kT6Poe8puQ02S+N3GJa6P2JS527NKjO9+3rsvp4fGXXw0c2ZvpdS5/Rv8xf7378AytAj0w==
+   eJzt1U0KwjAQBeC4UzxCt9aVa122egy9hogLF55A20L1ulaYQB2aZpj0D3wfhNeGkgxkSI0BAAAAkJtRRqNWoWNr37J3AA3eT117Ub7ZKHvaD+DL9t2tGs+GAd3atcxVeR+wlFGklGthHpX7rITrX5TrwzQtKF3nfaI8s1xS7tn8NTD5PjxzR52J+ZVRxkZmLvwO2vnuDxffuUvzEJjafTU2tedHwDp9KxrGVNk+4/eS75z+rf9c//sP3oYuEQ==
   </data>
  </layer>
- <objectgroup name="bodies" width="80" height="20">
+ <objectgroup name="bodies">
   <object name="ground" type="fixture" x="0" y="560">
    <properties>
     <property name="" value=""/>
@@ -120,6 +87,9 @@
    <polyline points="0,0 0,-29 3,-33 6,-36 280,-35 350,-105 770,-105"/>
   </object>
   <object name="environment" type="object" x="0" y="0">
+   <properties>
+    <property name="userData" value="environment"/>
+   </properties>
    <polyline points="0,700 0,0 2800,0 2800,700"/>
   </object>
   <object name="bridge" type="fixture" x="1273" y="442">
@@ -214,6 +184,21 @@
    <properties>
     <property name="body" value="environment"/>
    </properties>
+  </object>
+  <object name="exit" type="fixture" x="2731" y="493" width="69" height="171">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="bodyType" value="StaticBody"/>
+    <property name="isSensor" value="true"/>
+    <property name="userData" value="exit"/>
+   </properties>
+  </object>
+  <object name="ground" type="fixture" x="839" y="418">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 140,-138 347,-138"/>
   </object>
  </objectgroup>
 </map>
