@@ -23,7 +23,7 @@ public class LevelRenderer {
 	private final Array<CollectibleRenderer> collectibles;
 
 	public LevelRenderer(final TiledMap map, final AssetManager assets, final Batch batch, final float unitScale) {
-		collectibles = new Array<>(3);
+		collectibles = new Array<CollectibleRenderer>(3);
 
 		Texture background = assets.get(map.getProperties().get(BACKGROUND_PROPERTY,
 				AssetSystem.DEFAULT_BACKGROUND.fileName, String.class),
@@ -55,11 +55,15 @@ public class LevelRenderer {
 	 */
 	public void update() {
 		for (CollectibleRenderer collectible : collectibles) {
-			collectible.update(renderer.getSpriteBatch(), renderer.getViewBounds());
+			collectible.update(renderer.getBatch(), renderer.getViewBounds());
 		}
 	}
 
 	public TiledMap getTiledMap() {
 		return renderer.getMap();
+	}
+
+	public float getUnitScale() {
+		return renderer.getUnitScale();
 	}
 }
