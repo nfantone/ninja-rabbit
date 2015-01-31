@@ -5,6 +5,7 @@ import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.entity.Entity;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
@@ -21,8 +22,25 @@ public class CarrotGraphicsProcessor implements GraphicsProcessor {
 	}
 
 	@Override
+	public void update(final Entity character, final Camera camera) {
+		// Does nothing for this entity
+
+	}
+
+	@Override
 	public void draw(final Entity character, final Batch batch) {
 		carrot.draw(batch, character.getBody());
+	}
+
+	@Override
+	public void resize(final int width, final int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void dispose() {
+
 	}
 
 }

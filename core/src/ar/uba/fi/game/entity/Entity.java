@@ -4,17 +4,19 @@ import ar.uba.fi.game.audio.AudioProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
- * Any game object with any physics and/or graphics related behavior should extend this.
+ * Any game object with any physics, audio and/or graphics related behavior should extend this.
  *
  * @author nfantone
  *
  */
-public abstract class Entity {
+public abstract class Entity implements Disposable {
 	/**
 	 * Actions currently being performed by this entity, represented as a stream of bits.
 	 */
@@ -52,7 +54,18 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Draws the current {@link Sprite} and handles physics interaction according to this
+	 * Readies the state of this entity before the next step, updating before rendering. Should be
+	 * called before {@link Entity#step(Batch)}.
+	 *
+	 * @param camera
+	 *            The instance of the {@link Camera} used to show things on the screen.
+	 */
+	public void update(final Camera camera) {
+		graphics.update(this, camera);
+	}
+
+	/**
+	 * Draws the current {@link Sprite} and handles physics and audio interaction according to this
 	 * {@link Entity} inner state (e.g. the action it is performing: jumping, ducking, walking,
 	 * etc.).
 	 *
@@ -62,10 +75,23 @@ public abstract class Entity {
 	 * @param batch
 	 *            The {@link Batch} to use for drawing.
 	 */
-	public void update(final Batch batch) {
-		audio.update(this);
+	public void step(final Batch batch) {
 		physics.update(this);
+		audio.update(this);
 		graphics.draw(this, batch);
+	}
+
+	/**
+	 * Updates the sizes of the elements drawn on the screen to correspond to the new width and
+	 * height.
+	 *
+	 * @param width
+	 *            The new width of the viewport (in pixels).
+	 * @param height
+	 *            The new height of the viewport (in pixels).
+	 */
+	public void resize(final int width, final int height) {
+		graphics.resize(width, height);
 	}
 
 	/**
@@ -94,8 +120,30 @@ public abstract class Entity {
 		return actions;
 	}
 
+	/**
+	 * Whether this entity is performing the given action or not.
+	 *
+	 * @param action
+	 *            The action to test against the current actions of the entity.
+	 * @return true if this entity is executing the action; false, otherwise.
+	 */
 	public boolean isExecuting(final short action) {
 		return (actions & action) == action;
+	}
+
+	/**
+	 * Reset all actions to the initial state, as if none were being executed.
+	 */
+	public void clearActions() {
+		actions = 0;
+	}
+
+	@Override
+	public void dispose() {
+		audio.dispose();
+		graphics.dispose();
+		physics.dispose();
+
 	}
 
 	public Body getBody() {

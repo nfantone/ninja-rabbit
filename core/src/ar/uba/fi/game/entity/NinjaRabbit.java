@@ -48,9 +48,15 @@ public class NinjaRabbit extends Entity {
 	public static final short COLLECT = 64;
 
 	/**
-	 * The state this {@link Entity} is in after losing all remaining lives.
+	 * The state this {@link Entity} enters after reaching the end of a level.
 	 */
-	public static final short GAME_OVER = 128;
+	public static final short EXIT = 128;
+
+	/**
+	 * The state this {@link Entity} is in to indicate that the level should be restarted. Should
+	 * only be used for debugging purposes.
+	 */
+	public static final short RESET = 256;
 
 	/**
 	 * A component used to change the body of this {@link Entity} according the action being
@@ -77,10 +83,9 @@ public class NinjaRabbit extends Entity {
 	 * @see ar.uba.fi.game.entity.Entity#update(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
-	public void update(final Batch batch) {
+	public void step(final Batch batch) {
 		bodyProcessor.update(this);
-		super.update(batch);
+		super.step(batch);
 		player.update(this);
 	}
-
 }

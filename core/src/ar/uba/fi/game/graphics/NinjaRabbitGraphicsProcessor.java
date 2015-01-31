@@ -14,6 +14,7 @@ import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -30,7 +31,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	// private static final String DUCK_REGION = "duck";
-	private static final Vector2 RESPAWN_POSITION = new Vector2(0.1f, 3.2f);
+	private static final Vector2 RESPAWN_POSITION = new Vector2(0.6f, 3.2f);
 
 	private final TextureAtlas textureAtlas;
 	private final Box2DSprite standingSprite;
@@ -89,45 +90,62 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 
 	/*
 	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.graphics.GraphicsProcessor#update(ar.uba.fi.game.entity.Entity,
+	 * com.badlogic.gdx.graphics.Camera)
+	 */
+	@Override
+	public void update(final Entity character, final Camera camera) {
+		camera.position.x = character.getBody() == null ? 0.0f :
+			character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * 
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
 	public void draw(final Entity character, final Batch batch) {
-		if (!character.isExecuting(NinjaRabbit.GAME_OVER)) {
-			Box2DSprite frame = null;
-
-			if (character.isExecuting(NinjaRabbit.DEAD)) {
-				character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
-				frame = standingSprite;
+		Box2DSprite frame = null;
+		if (character.isExecuting(NinjaRabbit.DEAD) || character.isExecuting(NinjaRabbit.RESET)) {
+			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
+			frame = standingSprite;
+			character.setDirection(Direction.RIGHT);
+		} else {
+			if (character.isExecuting(NinjaRabbit.JUMP)) {
+				jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
+				frame = jumpSprite;
+			} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
+				frame = walkRightSprite;
 				character.setDirection(Direction.RIGHT);
+			} else if (character.isExecuting(NinjaRabbit.LEFT)) {
+				frame = walkLeftSprite;
+				character.setDirection(Direction.LEFT);
+			} else if (character.isExecuting(NinjaRabbit.DUCK)) {
+				// frame = duckSprite;
 			} else {
-				if (character.isExecuting(NinjaRabbit.JUMP)) {
-					jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
-					frame = jumpSprite;
-				} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
-					frame = walkRightSprite;
-					character.setDirection(Direction.RIGHT);
-				} else if (character.isExecuting(NinjaRabbit.LEFT)) {
-					frame = walkLeftSprite;
-					character.setDirection(Direction.LEFT);
-				} else if (character.isExecuting(NinjaRabbit.DUCK)) {
-					// frame = duckSprite;
-				} else {
-					standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
-					frame = standingSprite;
-					// duckSprite.setTime(0.0f);
-					jumpSprite.setTime(0.0f);
-				}
+				standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
+				frame = standingSprite;
+				// duckSprite.setTime(0.0f);
+				jumpSprite.setTime(0.0f);
 			}
-
-			frame.setPosition(
-					-frame.getWidth() / 2.0f +
-							Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
-									? 2.8f : 1.55f),
-					-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.36f);
-
-			frame.draw(batch, character.getBody());
 		}
+		frame.setPosition(
+				-frame.getWidth() * 0.5f +
+				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
+						? 2.8f : 1.55f),
+						-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
+
+		frame.draw(batch, character.getBody());
+	}
+
+	@Override
+	public void dispose() {
+
+	}
+
+	@Override
+	public void resize(final int width, final int height) {
 	}
 }
