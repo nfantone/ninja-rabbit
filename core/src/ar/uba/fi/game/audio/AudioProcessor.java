@@ -2,13 +2,15 @@ package ar.uba.fi.game.audio;
 
 import ar.uba.fi.game.entity.Entity;
 
+import com.badlogic.gdx.utils.Disposable;
+
 /**
  * Plays or stops audios and sfx according to a given {@link Entity} state.
  *
  * @author nfantone
  *
  */
-public interface AudioProcessor {
+public interface AudioProcessor extends Disposable {
 	/**
 	 * Starts or stops audio related to actions being performed by the {@link Entity}.
 	 *

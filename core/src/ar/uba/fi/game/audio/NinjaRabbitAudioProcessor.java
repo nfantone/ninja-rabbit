@@ -4,21 +4,23 @@ import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 
 /**
- * Handles audios played by actions taken by a {@link NinjaRabbit}.
+ * Handles audios played by actions taken by a {@link NinjaRabbit} entity.
  *
  * @author nfantone
  *
  */
 public class NinjaRabbitAudioProcessor implements AudioProcessor {
-	private static final int MAX_JUMP_TIMEOUT = 35;
-	private static final int MAX_GAME_OVER_TIMEOUT = 600;
+	private static final int MAX_JUMP_TIMEOUT = 30;
+	private static final int MAX_LIFE_LOST_TIMEOUT = 1000;
+
 	private final AssetManager assets;
 	private int jumpTimeout;
-	private int gameOverTimeout;
+	private int lifeLostTimeout;
 	private long jumpFxId;
 
 	public NinjaRabbitAudioProcessor(final AssetManager assets) {
@@ -32,22 +34,33 @@ public class NinjaRabbitAudioProcessor implements AudioProcessor {
 	 */
 	@Override
 	public void update(final Entity character) {
-		if (character.isExecuting(NinjaRabbit.JUMP) && jumpTimeout <= 0 && character.getBody().getLinearVelocity().y > 0) {
-			Sound jumpFx = assets.get(AssetSystem.JUMP_FX);
-			jumpFx.stop(jumpFxId);
-			jumpFxId = jumpFx.play();
-			jumpTimeout = MAX_JUMP_TIMEOUT;
+		if (character.isExecuting(NinjaRabbit.JUMP) && character.getBody().getLinearVelocity().y > 0) {
+			if (jumpTimeout <= 0) {
+				Sound jumpFx = assets.get(AssetSystem.JUMP_FX);
+				jumpFx.stop(jumpFxId);
+				jumpFxId = jumpFx.play();
+				jumpTimeout = MAX_JUMP_TIMEOUT;
+			} else {
+				jumpTimeout -= Gdx.graphics.getDeltaTime();
+			}
 		} else {
-			jumpTimeout--;
+			jumpTimeout = 0;
 		}
 
-		if (character.isExecuting(NinjaRabbit.GAME_OVER) && gameOverTimeout < 0) {
-			Sound gameOverFx = assets.get(AssetSystem.GAME_OVER_FX);
-			gameOverFx.play();
-			gameOverTimeout = MAX_GAME_OVER_TIMEOUT;
+		if (character.isExecuting(NinjaRabbit.DEAD)) {
+			if (lifeLostTimeout <= 0) {
+				assets.get(AssetSystem.LIFE_LOST_FX).play();
+				lifeLostTimeout = MAX_LIFE_LOST_TIMEOUT;
+			} else {
+				lifeLostTimeout -= Gdx.graphics.getDeltaTime();
+			}
 		} else {
-			gameOverTimeout--;
+			lifeLostTimeout = 0;
 		}
 	}
 
+	@Override
+	public void dispose() {
+
+	}
 }
