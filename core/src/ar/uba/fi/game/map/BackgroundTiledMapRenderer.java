@@ -28,7 +28,7 @@ public class BackgroundTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		super.beginRender();
 
 		// Draw the background
-		spriteBatch.draw(background, viewBounds.x, viewBounds.y, viewBounds.getWidth(), viewBounds.getHeight());
+		getBatch().draw(background, viewBounds.x, viewBounds.y, viewBounds.getWidth(), viewBounds.getHeight());
 	}
 
 }
