@@ -38,6 +38,7 @@ Ideas for the architecture and design were shamelessly taken from the phenomenal
 Also worth mentioning, is the handy work of [ForeignGuyMike](http://neetlife2.blogspot.com.ar/) who created the [LibGDX Box2D Tiled video tutorial series](http://youtu.be/85A1w1iD2oA?list=PL-2t7SM0vDfdYJ5Pq9vxeivblbZuFvGJK). Great for starting out with Box2D and drawing sprites.
 
 Let's not forget the invaluable help of the [Libgdx Cross-platform Game Development Cookbook](https://www.packtpub.com/game-development/libgdx-cross-platform-game-development-cookbook). You should give a it try.
+
 ----------
 
 #### Controls
