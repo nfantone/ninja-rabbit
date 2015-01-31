@@ -10,6 +10,11 @@ package ar.uba.fi.game.player;
  *
  */
 public interface PlayerStatus {
+	public static final short DEFAULT_TIME = 400;
+	public static final short DEFAULT_LIVES = 3;
+	public static final short DEFAULT_WORLD = 1;
+	public static final short DEFAULT_LEVEL = 1;
+
 	/**
 	 * Returns the count of gathered collectibles so far.
 	 *

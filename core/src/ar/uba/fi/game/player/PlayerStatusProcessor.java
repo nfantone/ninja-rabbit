@@ -1,7 +1,6 @@
 package ar.uba.fi.game.player;
 
 import ar.uba.fi.game.entity.Entity;
-import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -11,16 +10,11 @@ import com.badlogic.gdx.utils.Array;
  * @author nfantone
  *
  */
-public class PlayerStatusProcessor implements PlayerStatusSubject {
+public abstract class PlayerStatusProcessor implements PlayerStatusSubject {
 	/**
 	 * Time (in seconds) that should pass to make the countdown timer tick.
 	 */
 	private static final float IN_GAME_TIME_UNIT = 0.6f;
-
-	/**
-	 * Points earned by gathering a collectible.
-	 */
-	private static final int COLLECTIBLE_POINTS = 200;
 
 	/**
 	 * Metadata for the current gaming session of the player (typically displayed in the HUD or
@@ -46,7 +40,7 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 	 */
 	public PlayerStatusProcessor(final CurrentPlayerStatus status) {
 		this.status = status;
-		observers = new Array<>(2);
+		observers = new Array<PlayerStatusObserver>(2);
 	}
 
 	/**
@@ -56,31 +50,17 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 	 *            The {@link Entity} whose state is to be evaluated.
 	 */
 	public void update(final Entity character) {
-		if (character.isExecuting(NinjaRabbit.COLLECT)) {
-			status.setCollectibles((short) (status.getCollectibles() + 1));
-			status.setScore(status.getScore() + COLLECTIBLE_POINTS);
-			character.stop(NinjaRabbit.COLLECT);
-		} else if (character.isExecuting(NinjaRabbit.DEAD)) {
-			character.stop(NinjaRabbit.DEAD);
-			status.setLives((short) (status.getLives() - 1));
-			// No lives left: game over
-			if (status.getLives() < 1) {
-				character.execute(NinjaRabbit.GAME_OVER);
-			}
-		}
+		doUpdate(character);
 
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		if (elapsedTime > IN_GAME_TIME_UNIT) {
 			status.setTime((short) (status.getTime() - 1));
 			elapsedTime = 0.0f;
 			notifyObservers();
-
-			// Run out of time: game over
-			if (status.getTime() < 0) {
-				character.execute(NinjaRabbit.GAME_OVER);
-			}
 		}
 	}
+
+	protected abstract void doUpdate(final Entity character);
 
 	/*
 	 * (non-Javadoc)
@@ -113,9 +93,13 @@ public class PlayerStatusProcessor implements PlayerStatusSubject {
 	/**
 	 * Invokes every observer's callback.
 	 */
-	private void notifyObservers() {
+	protected void notifyObservers() {
 		for (PlayerStatusObserver o : observers) {
 			o.onPlayerStatusChange(status);
 		}
+	}
+
+	protected CurrentPlayerStatus getStatus() {
+		return status;
 	}
 }

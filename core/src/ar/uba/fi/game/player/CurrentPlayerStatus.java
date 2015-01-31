@@ -13,10 +13,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  *
  */
 public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
-	private static final short DEFAULT_TIME = 400;
-	private static final short DEFAULT_LIVES = 3;
-	private static final short DEFAULT_WORLD = 1;
-	private static final short DEFAULT_LEVEL = 1;
 
 	/**
 	 * How many collectibles have the player gathered.
@@ -55,6 +51,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		world = DEFAULT_WORLD;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ar.uba.fi.game.player.PlayerStatus#getCollectibles()
+	 */
 	@Override
 	public short getCollectibles() {
 		return collectibles;
@@ -64,6 +65,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.collectibles = collectibles;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.player.PlayerStatus#getLives()
+	 */
 	@Override
 	public short getLives() {
 		return lives;
@@ -73,6 +79,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.lives = lives;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.player.PlayerStatus#getScore()
+	 */
 	@Override
 	public int getScore() {
 		return score;
@@ -82,6 +93,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.score = score;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.player.PlayerStatus#getTime()
+	 */
 	@Override
 	public short getTime() {
 		return time;
@@ -91,6 +107,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.time = time;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.player.PlayerStatus#getLevel()
+	 */
 	@Override
 	public byte getLevel() {
 		return level;
@@ -100,6 +121,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.level = level;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.player.PlayerStatus#getWorld()
+	 */
 	@Override
 	public byte getWorld() {
 		return world;
@@ -109,6 +135,11 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		this.world = world;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.badlogic.gdx.utils.Pool.Poolable#reset()
+	 */
 	@Override
 	public void reset() {
 		lives = DEFAULT_LIVES;
@@ -119,11 +150,16 @@ public final class CurrentPlayerStatus implements PlayerStatus, Poolable {
 		score = 0;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[collectibles=").append(collectibles).append(", lives=").append(lives).append(", score=")
-				.append(score).append(", time=").append(time).append("]");
+		.append(score).append(", time=").append(time).append("]");
 		return builder.toString();
 	}
 
