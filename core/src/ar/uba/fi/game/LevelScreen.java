@@ -5,18 +5,17 @@ package ar.uba.fi.game;
 
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.EntityFactory;
+import ar.uba.fi.game.entity.Environment;
 import ar.uba.fi.game.entity.NinjaRabbit;
 import ar.uba.fi.game.graphics.BoundedCamera;
 import ar.uba.fi.game.graphics.hud.StatusBar;
 import ar.uba.fi.game.map.LevelFactory;
 import ar.uba.fi.game.map.LevelRenderer;
 import ar.uba.fi.game.physics.BodyEditorLoader;
+import ar.uba.fi.game.player.PlayerStatusObserver;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -27,8 +26,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class LevelScreen extends AbstractScreen {
 	private static final float GRAVITY = -9.8f;
 	private static final String BODIES_DEFINITION_FILE = "bodies.json";
-	private static final String LEVEL_MAP_FILE = "level2.tmx";
-	private static final String MUSIC_PROPERTY = "music";
 
 	private static final float TIME_STEP = 1 / 300f;
 	private static final int POSITION_ITERATIONS = 3;
@@ -36,14 +33,10 @@ public class LevelScreen extends AbstractScreen {
 
 	private final World world;
 	private final ScreenViewport viewport;
-	private final Box2DDebugRenderer b2dRenderer;
 	private final Entity ninjaRabbit;
-	private final LevelRenderer mapRenderer;
-	private final Music theme;
+	private final Entity environment;
 	private final StatusBar hud;
-	private final GameOverOverlay gameOver;
 	private float accumulator;
-	private float resetTime;
 
 	public LevelScreen(final NinjaRabbitGame game) {
 		super(game);
@@ -52,30 +45,24 @@ public class LevelScreen extends AbstractScreen {
 		hud = new StatusBar(game.getBatch(), game.getAssetsManager());
 
 		BodyEditorLoader bodyLoader = new BodyEditorLoader(Gdx.files.internal(BODIES_DEFINITION_FILE));
-		ninjaRabbit = EntityFactory.createNinjaRabbit(world, bodyLoader, game.getAssetsManager(), hud);
-		mapRenderer = LevelFactory.create(world, bodyLoader, game.getBatch(), game.getAssetsManager(), LEVEL_MAP_FILE,
+		ninjaRabbit = EntityFactory.createNinjaRabbit(world, bodyLoader, game.getAssetsManager(), game.getPlayerStatus(), hud);
+		LevelRenderer mapRenderer = LevelFactory.create(world, bodyLoader, game.getBatch(), game.getAssetsManager(), game.getPlayerStatus()
+				.getLevel(),
 				1 / NinjaRabbitGame.PPM);
+		environment = EntityFactory.createEnvironment(world, game.getBatch(), mapRenderer, game.getAssetsManager(),
+				game.getPlayerStatus(), (PlayerStatusObserver[]) null);
 		viewport = new ScreenViewport();
 		viewport.setUnitsPerPixel(1 / NinjaRabbitGame.PPM);
 		viewport.setCamera(new BoundedCamera(0.0f,
 				mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
-				* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue()
-				/ NinjaRabbitGame.PPM));
+						* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue()
+						/ NinjaRabbitGame.PPM));
 
-		theme = game.getAssetsManager().get(mapRenderer.getTiledMap().getProperties().get(MUSIC_PROPERTY,
-				AssetSystem.NINJA_RABBIT_THEME.fileName, String.class),
-				Music.class);
-		theme.setVolume(0.5f);
-		theme.setLooping(true);
-		theme.play();
-
-		b2dRenderer = new Box2DDebugRenderer();
-		gameOver = new GameOverOverlay(game);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
@@ -86,47 +73,46 @@ public class LevelScreen extends AbstractScreen {
 			accumulator -= TIME_STEP;
 		}
 
-		viewport.getCamera().position.x = ninjaRabbit.getBody() == null ? 0.0f :
-			ninjaRabbit.getBody().getPosition().x + viewport.getWorldWidth() / 4.0f;
+		ninjaRabbit.update(viewport.getCamera());
 		viewport.getCamera().update();
 		game.getBatch().setProjectionMatrix(viewport.getCamera().combined);
-		mapRenderer.render((OrthographicCamera) viewport.getCamera());
+		environment.update(viewport.getCamera());
 
 		game.getBatch().begin();
-		mapRenderer.update();
-		ninjaRabbit.update(game.getBatch());
+		ninjaRabbit.step(game.getBatch());
+		environment.step(game.getBatch());
 		game.getBatch().end();
 
 		hud.render();
 
-		if (ninjaRabbit.isExecuting(NinjaRabbit.GAME_OVER)) {
-			theme.stop();
-			gameOver.render(delta);
-			if (resetTime > 5.0f) {
-				game.reset();
-			} else {
-				resetTime += delta;
-			}
+		if (environment.isExecuting(Environment.RESET)) {
+			game.reset();
+		} else if (ninjaRabbit.isExecuting(NinjaRabbit.DEAD) && !environment.isExecuting(Environment.GAME_OVER)
+				|| ninjaRabbit.isExecuting(NinjaRabbit.RESET)) {
+			environment.clearActions();
+			ninjaRabbit.clearActions();
+			game.restartCurrentLevel();
+		} else if (environment.isExecuting(Environment.FINISH_LEVEL)) {
+			game.beginNextLevel();
 		}
-
-		// b2dRenderer.render(world, viewport.getCamera().combined);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
 	public void resize(final int width, final int height) {
 		viewport.update(width, height, true);
 		hud.resize(width, height);
-		gameOver.resize(width, height);
+		ninjaRabbit.resize(width, height);
+		environment.resize(width, height);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#show()
 	 */
 	@Override
@@ -137,7 +123,7 @@ public class LevelScreen extends AbstractScreen {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
@@ -148,7 +134,7 @@ public class LevelScreen extends AbstractScreen {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
@@ -157,16 +143,21 @@ public class LevelScreen extends AbstractScreen {
 
 	}
 
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.Screen#dispose()
 	 */
 	@Override
 	public void dispose() {
-		b2dRenderer.dispose();
+		ninjaRabbit.dispose();
+		environment.dispose();
 		world.dispose();
 		hud.dispose();
-		gameOver.dispose();
 	}
 }

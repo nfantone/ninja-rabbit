@@ -5,6 +5,7 @@ import ar.uba.fi.game.player.PlayerStatus;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -37,8 +38,10 @@ public class NinjaRabbitGame extends Game {
 		assetsManager.load(AssetSystem.NINJA_RABBIT_ATLAS);
 		assetsManager.load(AssetSystem.NINJA_RABBIT_THEME);
 		assetsManager.load(AssetSystem.JUMP_FX);
+		assetsManager.load(AssetSystem.LIFE_LOST_FX);
 		assetsManager.load(AssetSystem.GAME_OVER_FX);
 		assetsManager.load(AssetSystem.CRUNCH_FX);
+		assetsManager.load(AssetSystem.VICTORY_FX);
 		assetsManager.load(AssetSystem.HUD_FONT);
 		assetsManager.load(AssetSystem.DEFAULT_BACKGROUND);
 		assetsManager.load(AssetSystem.GRASSLAND_BACKGROUND);
@@ -75,16 +78,33 @@ public class NinjaRabbitGame extends Game {
 	 *
 	 * @return The current status of the player.
 	 */
-	public PlayerStatus getPlayerStatus() {
+	public CurrentPlayerStatus getPlayerStatus() {
 		return status;
 	}
 
 	/**
 	 * Sets the state of the game to what it was when it first began. Player status is reset and the
-	 * title screen is shown.
+	 * {@link TitleScreen} is shown.
 	 */
 	public void reset() {
 		status.reset();
+		getScreen().dispose();
 		setScreen(new TitleScreen(this));
+	}
+
+	/**
+	 * Brings back the last {@link LevelStartScreen} shown and resets the level, maintaining its
+	 * status. It does not dispose the current {@link Screen}.
+	 */
+	public void restartCurrentLevel() {
+		setScreen(new LevelStartScreen(this, getScreen()));
+	}
+
+	/**
+	 * Disposes of the current {@link Screen} and replaces it with a new {@link LevelStartScreen}.
+	 */
+	public void beginNextLevel() {
+		getScreen().dispose();
+		setScreen(new LevelStartScreen(this));
 	}
 }

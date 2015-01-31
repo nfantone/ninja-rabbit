@@ -100,10 +100,11 @@ public class TitleScreen extends AbstractScreen {
 					break;
 				case Keys.SPACE:
 				case Keys.ENTER:
+				case Keys.BUTTON_A:
 					if (exitIcon.isVisible()) {
 						Gdx.app.exit();
 					} else if (beginIcon.isVisible()) {
-						game.setScreen(new LevelStartScreen(game));
+						game.beginNextLevel();
 					}
 					break;
 				}
@@ -115,7 +116,6 @@ public class TitleScreen extends AbstractScreen {
 		stage.setKeyboardFocus(table);
 
 		Gdx.input.setInputProcessor(stage);
-
 		// table.debug();
 	}
 

@@ -6,6 +6,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import ar.uba.fi.game.player.PlayerStatus;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -20,7 +21,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * begins.
  *
  * @author nfantone
- *
  */
 public class LevelStartScreen extends AbstractScreen {
 	private static final String THREE_DIGITS = "%03d";
@@ -35,6 +35,7 @@ public class LevelStartScreen extends AbstractScreen {
 	private static final String SMALL_CARROT_REGION = "carrot-small";
 
 	private final Stage stage;
+	private Screen levelScreen;
 
 	public LevelStartScreen(final NinjaRabbitGame game) {
 		super(game);
@@ -65,14 +66,19 @@ public class LevelStartScreen extends AbstractScreen {
 
 		Table levelInfo = new Table();
 		levelInfo.add(new Label(LEVEL_LABEL, style)).expandX().right().padRight(18.0f);
-		// TODO Extraer nivel - mundo de PlayerStatus
-		levelInfo.add(new Label(String.format(LEVEL_FORMAT, 1, 1), style)).expandX().left().row().padTop(18.0f);
+		levelInfo.add(new Label(String.format(LEVEL_FORMAT, playerStatus.getWorld(), playerStatus.getLevel()), style)).expandX()
+				.left().padTop(18.0f).row();
 		Image livesIcon = new Image(hudAtlas.findRegion(LIVES_REGION));
 		levelInfo.add(livesIcon).expandX().right().spaceRight(25f);
 		levelInfo.add(livesLabel).expandX().left().bottom();
 		levelInfo.setFillParent(true);
 		stage.addActor(levelInfo);
 
+	}
+
+	public LevelStartScreen(final NinjaRabbitGame game, final Screen levelScreen) {
+		this(game);
+		this.levelScreen = levelScreen;
 	}
 
 	@Override
@@ -91,17 +97,18 @@ public class LevelStartScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		// Fade in / fade out effect
-		stage.addAction(sequence(fadeIn(0.75f), delay(1.75f), fadeOut(0.35f),
-				new Action() {
-					@Override
-					public boolean act(
-							final float delta)
-					{
-						// Last action will move to the next screen
-						game.setScreen(new LevelScreen(game));
-						return true;
-					}
-				}));
+		stage.addAction(sequence(fadeIn(0.75f), delay(1.75f), fadeOut(0.35f), new Action() {
+			@Override
+			public boolean act(final float delta) {
+				// Last action will move to the next screen
+				if (levelScreen == null) {
+					game.setScreen(new LevelScreen(game));
+				} else {
+					game.setScreen(levelScreen);
+				}
+				return true;
+			}
+		}));
 	}
 
 	@Override
@@ -125,5 +132,4 @@ public class LevelStartScreen extends AbstractScreen {
 	public void dispose() {
 		stage.dispose();
 	}
-
 }

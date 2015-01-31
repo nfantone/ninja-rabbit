@@ -1,8 +1,10 @@
 package ar.uba.fi.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,11 +26,11 @@ public class GameOverOverlay implements Disposable {
 	private final Stage stage;
 	private final ShapeRenderer overlay;
 
-	public GameOverOverlay(final NinjaRabbitGame game) {
-		stage = new Stage(new ScreenViewport(), game.getBatch());
+	public GameOverOverlay(final Batch batch, final AssetManager assets) {
+		stage = new Stage(new ScreenViewport(), batch);
 		Label.LabelStyle style = new Label.LabelStyle();
 		style.fontColor = Color.WHITE;
-		style.font = game.getAssetsManager().get(AssetSystem.HUD_FONT);
+		style.font = assets.get(AssetSystem.HUD_FONT);
 		Label gameOver = new Label(GAME_OVER_TEXT, style);
 
 		Table table = new Table();
@@ -51,8 +53,10 @@ public class GameOverOverlay implements Disposable {
 		overlay.end();
 		Gdx.gl20.glDisable(GL20.GL_BLEND);
 
+		stage.getBatch().end();
 		stage.act(delta);
 		stage.draw();
+		stage.getBatch().begin();
 	}
 
 	public void resize(final int width, final int height) {
@@ -63,5 +67,4 @@ public class GameOverOverlay implements Disposable {
 	public void dispose() {
 		overlay.dispose();
 	}
-
 }
