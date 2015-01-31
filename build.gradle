@@ -1,75 +1,76 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.13+'
-    }
+	repositories { mavenCentral() }
+	dependencies { classpath 'com.android.tools.build:gradle:0.13+' }
 }
 
 allprojects {
-    apply plugin: "eclipse"
-    apply plugin: "idea"
+	apply plugin: "eclipse"
+	apply plugin: "idea"
 
-    version = '1.0'
-    ext {
-        appName = 'fiuba-game2'
-        gdxVersion = '1.4.2-SNAPSHOT'
-        roboVMVersion = '1.0.0-alpha-04'
-        box2DLightsVersion = '1.2'
-    }
+	version = '1.0'
+	ext {
+		appName = 'fiuba-game2'
+		gdxVersion = '1.5.4-SNAPSHOT'
+		roboVMVersion = '1.0.0-alpha-04'
+		box2DLightsVersion = '1.4-SNAPSHOT'
+		gdxAiVersion = '1.5.1-SNAPSHOT'
+	}
 
-    repositories {
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-    }
+	repositories {
+		mavenCentral()
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+	}
 }
 
 project(":desktop") {
-    apply plugin: "java"
+	apply plugin: "java"
 
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	dependencies {
+		compile project(":core")
+		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+		compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+		compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
 		compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    }
+	}
 }
 
 project(":android") {
-    apply plugin: "android"
+	apply plugin: "android"
 
-    configurations { natives }
+	configurations { natives }
 
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-    }
+	dependencies {
+		compile project(":core")
+		compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+		natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+		natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+		natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+		compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+		natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
+		natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+		natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+		compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+		compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-ai:$gdxAiVersion"
+	}
 }
 
 project(":core") {
-    apply plugin: "java"
+	apply plugin: "java"
 
 
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-		compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.6.1-SNAPSHOT"
-    }
+	dependencies {
+		compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+		compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+		compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+		compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.9.2-SNAPSHOT"
+		compile "com.badlogicgames.gdx:gdx-ai:$gdxAiVersion"
+	}
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
-}
+tasks.eclipse.doLast { delete ".project" }
