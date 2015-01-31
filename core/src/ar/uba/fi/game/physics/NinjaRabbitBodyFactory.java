@@ -3,6 +3,7 @@ package ar.uba.fi.game.physics;
 import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -16,9 +17,10 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public final class NinjaRabbitBodyFactory implements BodyFactory {
-	private static final float NINJA_RABBIT_SCALE = 186 / NinjaRabbitGame.PPM;
+	private static final float NINJA_RABBIT_SCALE = 101 / NinjaRabbitGame.PPM;
 	private static final int FOOT_FIXTURE_INDEX = 9;
 	private static final String RABBIT_IDENTIFIER = "rabbit";
+	private static final Vector2 INITIAL_POSITION = new Vector2(1.2f, 2.2f);
 
 	private final BodyEditorLoader loader;
 	private final BodyDef bdef;
@@ -32,12 +34,15 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 		bdef = new BodyDef();
 		bdef.type = BodyType.DynamicBody;
-		bdef.position.set(0, 0);
+		bdef.position.set(INITIAL_POSITION);
 		bdef.fixedRotation = true;
+		bdef.gravityScale = 2.0f;
+		// bdef.bullet = true;
 
 		fdef = new FixtureDef();
-		fdef.density = 1;
-		fdef.friction = 1.4f;
+		fdef.density = 1.0f;
+		fdef.restitution = 0.0f;
+		fdef.friction = 0.8f;
 	};
 
 	/*
@@ -75,7 +80,10 @@ public final class NinjaRabbitBodyFactory implements BodyFactory {
 
 		Fixture footSensor = rabbitBody.getFixtureList().get(FOOT_FIXTURE_INDEX);
 		footSensor.setUserData(NinjaRabbitPhysicsProcessor.FOOT_IDENTIFIER);
+		footSensor.setDensity(0.0f);
 		footSensor.setSensor(true);
+
+		rabbitBody.resetMassData();
 
 		return rabbitBody;
 	}

@@ -17,12 +17,46 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  *
  */
 public class NinjaRabbit extends Entity {
+	/**
+	 * The state this {@link Entity} is in when jumping.
+	 */
 	public static final short JUMP = 2;
+
+	/**
+	 * The state this {@link Entity} is in when moving left.
+	 */
 	public static final short LEFT = 4;
+
+	/**
+	 * The state this {@link Entity} is in when moving right.
+	 */
 	public static final short RIGHT = 8;
+
+	/**
+	 * The state this {@link Entity} is in when ducking.
+	 */
 	public static final short DUCK = 16;
+
+	/**
+	 * The state this {@link Entity} is in after losing a life.
+	 */
 	public static final short DEAD = 32;
+
+	/**
+	 * The state this {@link Entity} is in after grabbing a collectable.
+	 */
 	public static final short COLLECT = 64;
+
+	/**
+	 * The state this {@link Entity} enters after reaching the end of a level.
+	 */
+	public static final short EXIT = 128;
+
+	/**
+	 * The state this {@link Entity} is in to indicate that the level should be restarted. Should
+	 * only be used for debugging purposes.
+	 */
+	public static final short RESET = 256;
 
 	/**
 	 * A component used to change the body of this {@link Entity} according the action being
@@ -49,10 +83,9 @@ public class NinjaRabbit extends Entity {
 	 * @see ar.uba.fi.game.entity.Entity#update(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
-	public void update(final Batch batch) {
+	public void step(final Batch batch) {
 		bodyProcessor.update(this);
-		super.update(batch);
+		super.step(batch);
 		player.update(this);
 	}
-
 }

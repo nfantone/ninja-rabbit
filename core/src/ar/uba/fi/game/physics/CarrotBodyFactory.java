@@ -2,7 +2,6 @@ package ar.uba.fi.game.physics;
 
 import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
-import ar.uba.fi.game.graphics.CarrotPhysicsProcessor;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;

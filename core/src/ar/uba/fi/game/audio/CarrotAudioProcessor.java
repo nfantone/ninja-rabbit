@@ -27,4 +27,8 @@ public class CarrotAudioProcessor implements AudioProcessor {
 		}
 	}
 
+	@Override
+	public void dispose() {
+
+	}
 }

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="20" tilewidth="35" tileheight="35">
+ <properties>
+  <property name="background" value="bg_grasslands.png"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="70" tileheight="70" spacing="2" margin="2">
+  <image source="tiles.png" width="1874" height="434"/>
+ </tileset>
+ <layer name="background" width="80" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1LENgCAQhWHGoHcDR7K0dgM6age20hByhwSJkMv/JeSQwElegXPAXGJSY2mjcCafS9/aGtpYy/JU5q1npB61fUt8hx4W9MgSAKzYR18AeLEo1ScDmE0YfQE88rfjtnX+z5FVzGdVBuqR3XcjsrP0Lv2Z3QV4Rg6h
+  </data>
+ </layer>
+ <objectgroup name="collectibles">
+  <object x="174" y="523">
+   <ellipse/>
+  </object>
+  <object x="627" y="381">
+   <ellipse/>
+  </object>
+  <object x="1294" y="382">
+   <ellipse/>
+  </object>
+  <object x="1468" y="382">
+   <ellipse/>
+  </object>
+  <object x="1539" y="383">
+   <ellipse/>
+  </object>
+  <object x="2168" y="381">
+   <ellipse/>
+  </object>
+  <object x="2345" y="450">
+   <ellipse/>
+  </object>
+  <object x="2410" y="452">
+   <ellipse/>
+  </object>
+  <object x="2518" y="628">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="foreground" width="80" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1U0KwjAQBeC4UzxCt9aVa122egy9hogLF55A20L1ulaYQB2aZpj0D3wfhNeGkgxkSI0BAAAAkJtRRqNWoWNr37J3AA3eT117Ub7ZKHvaD+DL9t2tGs+GAd3atcxVeR+wlFGklGthHpX7rITrX5TrwzQtKF3nfaI8s1xS7tn8NTD5PjxzR52J+ZVRxkZmLvwO2vnuDxffuUvzEJjafTU2tedHwDp9KxrGVNk+4/eS75z+rf9c//sP3oYuEQ==
+  </data>
+ </layer>
+ <objectgroup name="bodies">
+  <object name="ground" type="fixture" x="0" y="560">
+   <properties>
+    <property name="" value=""/>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 280,0"/>
+  </object>
+  <object name="sign" type="fixtue" x="490" y="210" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="sign-block" type="fixture" x="560" y="210" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="block" type="fixture" x="630" y="210" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="block" type="fixture" x="70" y="280" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="sign-block" type="fixture" x="140" y="280" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="ground" type="fixture" x="420" y="525">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 0,-29 3,-33 6,-36 280,-35 350,-105 770,-105"/>
+  </object>
+  <object name="environment" type="object" x="0" y="0">
+   <properties>
+    <property name="userData" value="environment"/>
+   </properties>
+   <polyline points="0,700 0,0 2800,0 2800,700"/>
+  </object>
+  <object name="bridge" type="fixture" x="1273" y="442">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1295" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1316" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1449" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1472" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1494" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1514" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="bridge" type="fixture" x="1536" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="ground" type="fixture" x="1610" y="420">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 350,0 419,70 630,70"/>
+  </object>
+  <object name="platform" type="fixture" x="2310" y="490" width="140" height="35">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+  </object>
+  <object name="ground" type="fixture" x="2590" y="653">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 0,-17 2,-20 6,-23 210,-23"/>
+  </object>
+  <object name="bridge" type="fixture" x="1559" y="443">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="sign-block" type="fixture" x="1715" y="175" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="block" type="fixture" x="1645" y="175" width="70" height="70">
+   <properties>
+    <property name="body" value="environment"/>
+   </properties>
+  </object>
+  <object name="exit" type="fixture" x="2731" y="493" width="69" height="171">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="bodyType" value="StaticBody"/>
+    <property name="isSensor" value="true"/>
+    <property name="userData" value="exit"/>
+   </properties>
+  </object>
+  <object name="ground" type="fixture" x="839" y="418">
+   <properties>
+    <property name="body" value="environment"/>
+    <property name="userData" value="ground"/>
+   </properties>
+   <polyline points="0,0 140,-138 347,-138"/>
+  </object>
+ </objectgroup>
+</map>

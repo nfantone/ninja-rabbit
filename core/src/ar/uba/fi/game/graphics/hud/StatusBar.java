@@ -1,7 +1,7 @@
 package ar.uba.fi.game.graphics.hud;
 
 import ar.uba.fi.game.AssetSystem;
-import ar.uba.fi.game.player.PlayerStatusEvent;
+import ar.uba.fi.game.player.PlayerStatus;
 import ar.uba.fi.game.player.PlayerStatusObserver;
 
 import com.badlogic.gdx.assets.AssetManager;
@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * Holds a {@link Stage} that renders a HUD layer above the player showing statistics such as the
  * number of lives left, remaining time, current score and so on.
  *
- * Gets updated every time a {@link PlayerStatusEvent} is fired.
+ * Gets updated every time a {@link PlayerStatus} event is fired.
  *
  * @author nfantone
  *
@@ -37,14 +37,6 @@ public class StatusBar implements PlayerStatusObserver {
 	private final Label livesLabel;
 	private final Label scoreLabel;
 	private final Label timeLabel;
-
-	@Override
-	public void onPlayerStatusChange(final PlayerStatusEvent event) {
-		collectiblesLabel.setText(String.format(TWO_DIGITS, event.getCollectibles()));
-		scoreLabel.setText(String.format(EIGHT_DIGITS, event.getScore()));
-		timeLabel.setText(String.format(THREE_DIGITS, event.getTime()));
-		livesLabel.setText(String.format(TWO_DIGITS, event.getLives()));
-	}
 
 	public StatusBar(final Batch batch, final AssetManager assets) {
 		overlay = new Stage(new ScreenViewport(), batch);
@@ -74,7 +66,14 @@ public class StatusBar implements PlayerStatusObserver {
 		table.pad(15.0f);
 
 		overlay.addActor(table);
+	}
 
+	@Override
+	public void onPlayerStatusChange(final PlayerStatus event) {
+		collectiblesLabel.setText(String.format(TWO_DIGITS, event.getCollectibles()));
+		scoreLabel.setText(String.format(EIGHT_DIGITS, event.getScore()));
+		timeLabel.setText(String.format(THREE_DIGITS, event.getTime()));
+		livesLabel.setText(String.format(TWO_DIGITS, event.getLives()));
 	}
 
 	public void resize(final int width, final int height) {

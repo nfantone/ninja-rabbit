@@ -5,16 +5,17 @@ package ar.uba.fi.game;
 
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.EntityFactory;
+import ar.uba.fi.game.entity.Environment;
+import ar.uba.fi.game.entity.NinjaRabbit;
 import ar.uba.fi.game.graphics.BoundedCamera;
 import ar.uba.fi.game.graphics.hud.StatusBar;
 import ar.uba.fi.game.map.LevelFactory;
 import ar.uba.fi.game.map.LevelRenderer;
 import ar.uba.fi.game.physics.BodyEditorLoader;
+import ar.uba.fi.game.player.PlayerStatusObserver;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -23,36 +24,40 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  *
  */
 public class LevelScreen extends AbstractScreen {
+	private static final float GRAVITY = -9.8f;
 	private static final String BODIES_DEFINITION_FILE = "bodies.json";
-	private static final String LEVEL_MAP_FILE = "level.tmx";
 
-	private static final float TIME_STEP = 1 / 45f;
+	private static final float TIME_STEP = 1 / 300f;
+	private static final int POSITION_ITERATIONS = 3;
+	private static final int VELOCITY_ITERATIONS = 8;
 
 	private final World world;
 	private final ScreenViewport viewport;
-	private final Box2DDebugRenderer b2dRenderer;
 	private final Entity ninjaRabbit;
-	private final LevelRenderer mapRenderer;
+	private final Entity environment;
 	private final StatusBar hud;
+	private float accumulator;
 
 	public LevelScreen(final NinjaRabbitGame game) {
 		super(game);
 
-		world = new World(new Vector2(0.0f, -9.8f), true);
-
+		world = new World(new Vector2(0.0f, GRAVITY), true);
 		hud = new StatusBar(game.getBatch(), game.getAssetsManager());
 
 		BodyEditorLoader bodyLoader = new BodyEditorLoader(Gdx.files.internal(BODIES_DEFINITION_FILE));
-		ninjaRabbit = EntityFactory.createNinjaRabbit(world, bodyLoader, game.getAssetsManager(), hud);
-		mapRenderer = LevelFactory.create(world, bodyLoader, game.getBatch(), game.getAssetsManager(), LEVEL_MAP_FILE,
+		ninjaRabbit = EntityFactory.createNinjaRabbit(world, bodyLoader, game.getAssetsManager(), game.getPlayerStatus(), hud);
+		LevelRenderer mapRenderer = LevelFactory.create(world, bodyLoader, game.getBatch(), game.getAssetsManager(), game.getPlayerStatus()
+				.getLevel(),
 				1 / NinjaRabbitGame.PPM);
-
+		environment = EntityFactory.createEnvironment(world, game.getBatch(), mapRenderer, game.getAssetsManager(),
+				game.getPlayerStatus(), (PlayerStatusObserver[]) null);
 		viewport = new ScreenViewport();
 		viewport.setUnitsPerPixel(1 / NinjaRabbitGame.PPM);
-		viewport.setCamera(new BoundedCamera(0.0f, mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
-				* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue() / NinjaRabbitGame.PPM));
+		viewport.setCamera(new BoundedCamera(0.0f,
+				mapRenderer.getTiledMap().getProperties().get("width", Integer.class).floatValue()
+						* mapRenderer.getTiledMap().getProperties().get("tilewidth", Integer.class).floatValue()
+						/ NinjaRabbitGame.PPM));
 
-		b2dRenderer = new Box2DDebugRenderer();
 	}
 
 	/*
@@ -62,23 +67,34 @@ public class LevelScreen extends AbstractScreen {
 	 */
 	@Override
 	public void render(final float delta) {
-		world.step(TIME_STEP, 8, 3);
+		accumulator += Math.min(delta, 0.25f);
+		while (accumulator >= TIME_STEP) {
+			world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+			accumulator -= TIME_STEP;
+		}
 
-		viewport.getCamera().position.x = ninjaRabbit.getBody() == null ? 0.0f :
-				ninjaRabbit.getBody().getPosition().x
-						+ viewport.getWorldWidth() / 4.0f;
+		ninjaRabbit.update(viewport.getCamera());
 		viewport.getCamera().update();
 		game.getBatch().setProjectionMatrix(viewport.getCamera().combined);
-		mapRenderer.render((OrthographicCamera) viewport.getCamera());
+		environment.update(viewport.getCamera());
 
 		game.getBatch().begin();
-		mapRenderer.update();
-		ninjaRabbit.update(game.getBatch());
+		ninjaRabbit.step(game.getBatch());
+		environment.step(game.getBatch());
 		game.getBatch().end();
 
 		hud.render();
 
-		// b2dRenderer.render(world, viewport.getCamera().combined);
+		if (environment.isExecuting(Environment.RESET)) {
+			game.reset();
+		} else if (ninjaRabbit.isExecuting(NinjaRabbit.DEAD) && !environment.isExecuting(Environment.GAME_OVER)
+				|| ninjaRabbit.isExecuting(NinjaRabbit.RESET)) {
+			environment.clearActions();
+			ninjaRabbit.clearActions();
+			game.restartCurrentLevel();
+		} else if (environment.isExecuting(Environment.FINISH_LEVEL)) {
+			game.beginNextLevel();
+		}
 	}
 
 	/*
@@ -90,7 +106,8 @@ public class LevelScreen extends AbstractScreen {
 	public void resize(final int width, final int height) {
 		viewport.update(width, height, true);
 		hud.resize(width, height);
-
+		ninjaRabbit.resize(width, height);
+		environment.resize(width, height);
 	}
 
 	/*
@@ -126,6 +143,11 @@ public class LevelScreen extends AbstractScreen {
 
 	}
 
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -133,7 +155,8 @@ public class LevelScreen extends AbstractScreen {
 	 */
 	@Override
 	public void dispose() {
-		b2dRenderer.dispose();
+		ninjaRabbit.dispose();
+		environment.dispose();
 		world.dispose();
 		hud.dispose();
 	}

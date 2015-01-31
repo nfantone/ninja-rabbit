@@ -1,6 +1,6 @@
 package ar.uba.fi.game.physics;
 
-import net.dermetfan.utils.libgdx.Multiplexer;
+import net.dermetfan.gdx.Multiplexer;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;

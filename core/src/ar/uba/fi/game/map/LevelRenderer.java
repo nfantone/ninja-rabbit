@@ -1,8 +1,11 @@
 package ar.uba.fi.game.map;
 
+import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.entity.Collectible;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,16 +18,18 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class LevelRenderer {
+	private static final String BACKGROUND_PROPERTY = "background";
 	private final OrthogonalTiledMapRenderer renderer;
-	private final TiledMap tiledMap;
 	private final Array<CollectibleRenderer> collectibles;
-	private final Batch batch;
 
-	public LevelRenderer(final TiledMap map, final Batch batch, final float unitScale) {
-		collectibles = new Array<>(3);
-		this.tiledMap = map;
-		this.batch = batch;
-		renderer = new OrthogonalTiledMapRenderer(map, unitScale, batch);
+	public LevelRenderer(final TiledMap map, final AssetManager assets, final Batch batch, final float unitScale) {
+		collectibles = new Array<CollectibleRenderer>(3);
+
+		Texture background = assets.get(map.getProperties().get(BACKGROUND_PROPERTY,
+				AssetSystem.DEFAULT_BACKGROUND.fileName, String.class),
+				Texture.class);
+
+		renderer = new BackgroundTiledMapRenderer(map, unitScale, batch, background);
 	}
 
 	public void addCollectibleRenderer(final CollectibleRenderer renderer) {
@@ -39,23 +44,26 @@ public class LevelRenderer {
 	 *            The camera used to show the map.
 	 */
 	public void render(final OrthographicCamera camera) {
-		renderer.setView(camera);
+		float width = 1.12f * camera.viewportWidth * camera.zoom;
+		float height = camera.viewportHeight * camera.zoom;
+		renderer.setView(camera.combined, camera.position.x - width / 2, camera.position.y - height / 2, width, height);
 		renderer.render();
 	}
 
 	/**
 	 * Updates every {@link Collectible} in the level.
-	 *
-	 * @param batch
-	 *            The {@link Batch} used to draw the sprites of the {@link Collectible}.
 	 */
 	public void update() {
 		for (CollectibleRenderer collectible : collectibles) {
-			collectible.update(batch, renderer.getViewBounds());
+			collectible.update(renderer.getBatch(), renderer.getViewBounds());
 		}
 	}
 
 	public TiledMap getTiledMap() {
-		return tiledMap;
+		return renderer.getMap();
+	}
+
+	public float getUnitScale() {
+		return renderer.getUnitScale();
 	}
 }

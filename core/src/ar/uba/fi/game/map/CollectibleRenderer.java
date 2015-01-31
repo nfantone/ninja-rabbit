@@ -35,8 +35,8 @@ public class CollectibleRenderer {
 	}
 
 	public CollectibleRenderer(final float unitScale) {
-		this.collectibles = new Array<>();
-		this.removed = new Array<>();
+		this.collectibles = new Array<Entity>();
+		this.removed = new Array<Entity>();
 		this.unitScale = unitScale;
 	}
 
@@ -53,19 +53,17 @@ public class CollectibleRenderer {
 		for (MapObject mo : layer.getObjects()) {
 			BodyDef bodyDefinition = new BodyDef();
 			bodyDefinition.type = BodyType.KinematicBody;
-			float x = (float) mo.getProperties().get("x") * unitScale;
-			float y = (float) mo.getProperties().get("y") * unitScale;
+			float x = ((Float) mo.getProperties().get("x")).floatValue() * unitScale;
+			float y = ((Float) mo.getProperties().get("y")).floatValue() * unitScale;
 			bodyDefinition.position.set(x, y);
 
 			BodyFactory bodyFactory = null;
 			Entity entity = null;
 
-			switch (mo.getProperties().get(TYPE_PROPERTY, String.class)) {
-			case CARROT_TYPE:
+			if (CARROT_TYPE.equals(mo.getProperties().get(TYPE_PROPERTY, CARROT_TYPE, String.class))) {
 				bodyFactory = new CarrotBodyFactory(loader);
 				entity = EntityFactory.createCollectible(world, assets);
-				break;
-			default:
+			} else {
 				throw new IllegalArgumentException("Unknown collectible type {" + mo.getProperties().get(TYPE_PROPERTY, String.class) + "}");
 			}
 
@@ -100,7 +98,7 @@ public class CollectibleRenderer {
 	}
 
 	private void renderEntity(final Batch batch, final Entity e) {
-		e.update(batch);
+		e.step(batch);
 		if (e.isExecuting(Collectible.COLLECTED)) {
 			removed.add(e);
 			e.stop(Collectible.COLLECTED);

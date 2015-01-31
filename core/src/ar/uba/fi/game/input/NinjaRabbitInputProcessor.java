@@ -17,6 +17,7 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 	private final static int LEFT_KEY = Keys.A;
 	private final static int DUCK_KEY = Keys.S;
 	private final static int RIGHT_KEY = Keys.D;
+	private static final int RESET_KEY = Keys.BACKSPACE;
 
 	private final Entity character;
 
@@ -40,7 +41,10 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 			character.execute(NinjaRabbit.RIGHT);
 			break;
 		case DUCK_KEY:
-			character.execute(NinjaRabbit.DUCK);
+			// character.execute(NinjaRabbit.DUCK);
+			break;
+		case RESET_KEY:
+			character.execute(NinjaRabbit.RESET);
 			break;
 		default:
 			break;

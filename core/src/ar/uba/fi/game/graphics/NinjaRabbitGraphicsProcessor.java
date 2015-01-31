@@ -3,10 +3,10 @@
  */
 package ar.uba.fi.game.graphics;
 
-import net.dermetfan.utils.libgdx.box2d.Box2DUtils;
-import net.dermetfan.utils.libgdx.graphics.AnimatedBox2DSprite;
-import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
-import net.dermetfan.utils.libgdx.graphics.Box2DSprite;
+import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
+import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 import ar.uba.fi.game.AssetSystem;
 import ar.uba.fi.game.NinjaRabbitGame;
 import ar.uba.fi.game.entity.Direction;
@@ -14,6 +14,7 @@ import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -30,7 +31,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	// private static final String DUCK_REGION = "duck";
-	private static final Vector2 RESPAWN_POSITION = new Vector2(70 / NinjaRabbitGame.PPM, 150 / NinjaRabbitGame.PPM);
+	private static final Vector2 RESPAWN_POSITION = new Vector2(0.6f, 3.2f);
 
 	private final TextureAtlas textureAtlas;
 	private final Box2DSprite standingSprite;
@@ -89,14 +90,25 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 
 	/*
 	 * (non-Javadoc)
+	 *
+	 * @see ar.uba.fi.game.graphics.GraphicsProcessor#update(ar.uba.fi.game.entity.Entity,
+	 * com.badlogic.gdx.graphics.Camera)
+	 */
+	@Override
+	public void update(final Entity character, final Camera camera) {
+		camera.position.x = character.getBody() == null ? 0.0f :
+			character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * 
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
 	public void draw(final Entity character, final Batch batch) {
 		Box2DSprite frame = null;
-
-		if (character.isExecuting(NinjaRabbit.DEAD)) {
+		if (character.isExecuting(NinjaRabbit.DEAD) || character.isExecuting(NinjaRabbit.RESET)) {
 			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
 			frame = standingSprite;
 			character.setDirection(Direction.RIGHT);
@@ -120,10 +132,20 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 			}
 		}
 		frame.setPosition(
-				-frame.getWidth() / 2.0f +
-						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection()) ? 2.8f : 1.55f),
-				-frame.getHeight() / 2.0f + Box2DUtils.width(character.getBody()) + 0.53f);
+				-frame.getWidth() * 0.5f +
+				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
+						? 2.8f : 1.55f),
+						-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
 
 		frame.draw(batch, character.getBody());
+	}
+
+	@Override
+	public void dispose() {
+
+	}
+
+	@Override
+	public void resize(final int width, final int height) {
 	}
 }

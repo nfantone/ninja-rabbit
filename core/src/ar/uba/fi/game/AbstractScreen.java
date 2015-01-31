@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 
 /**
  * Base class for every {@link Screen} in the game. Holds a reference to the main game instance.
- * 
+ *
  * @author nfantone
  *
  */

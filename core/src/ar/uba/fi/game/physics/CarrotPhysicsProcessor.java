@@ -1,8 +1,7 @@
-package ar.uba.fi.game.graphics;
+package ar.uba.fi.game.physics;
 
 import ar.uba.fi.game.entity.Collectible;
 import ar.uba.fi.game.entity.Entity;
-import ar.uba.fi.game.physics.PhysicsProcessor;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -63,6 +62,10 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 				character.stop(Collectible.UP);
 			}
 		}
+	}
+
+	@Override
+	public void dispose() {
 
 	}
 }
