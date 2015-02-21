@@ -11,6 +11,7 @@ import ar.uba.fi.game.graphics.CarrotGraphicsProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.graphics.LevelGraphicsProcessor;
 import ar.uba.fi.game.graphics.NinjaRabbitGraphicsProcessor;
+import ar.uba.fi.game.graphics.SlimeGraphicsProcessor;
 import ar.uba.fi.game.input.NinjaRabbitControllerProcessor;
 import ar.uba.fi.game.input.NinjaRabbitInputProcessor;
 import ar.uba.fi.game.map.LevelRenderer;
@@ -22,6 +23,7 @@ import ar.uba.fi.game.physics.LevelPhysicsProcessor;
 import ar.uba.fi.game.physics.NinjaRabbitBodyProcessor;
 import ar.uba.fi.game.physics.NinjaRabbitPhysicsProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
+import ar.uba.fi.game.physics.SlimePhysicsProcessor;
 import ar.uba.fi.game.player.CurrentPlayerStatus;
 import ar.uba.fi.game.player.LevelPlayerStatusProcessor;
 import ar.uba.fi.game.player.NinjaRabbitPlayerStatusProcessor;
@@ -73,6 +75,26 @@ public final class EntityFactory {
 		GraphicsProcessor graphics = new CarrotGraphicsProcessor(assets);
 		AudioProcessor audio = new CarrotAudioProcessor(assets);
 		return new Collectible(graphics, physics, audio);
+	}
+
+	/**
+	 * Creates a new instance of {@link Enemy}, defining its graphical, audio and physical
+	 * properties.
+	 *
+	 * @param world
+	 *            The Box2D {@link World} onto which to create the {@link Body} and {@link Fixture}
+	 *            of the {@link Entity}.
+	 * @param assets
+	 *            The {@link AssetManager} from where to extract the graphical and audio resources.
+	 *            Those resources should be loaded in the manager before calling this method.
+	 * @return A ready to use instance of a new {@link Enemy}.
+	 */
+	public static Entity createEnemy(final World world, final AssetManager assets) {
+		PhysicsProcessor physics = new SlimePhysicsProcessor();
+		CONTACT_LISTENER.add(physics);
+		world.setContactListener(CONTACT_LISTENER);
+		GraphicsProcessor graphics = new SlimeGraphicsProcessor(assets);
+		return new Enemy(graphics, physics, null);
 	}
 
 	/**

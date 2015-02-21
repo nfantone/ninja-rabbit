@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public final class LevelFactory {
 	private static final String LEVEL_MAP_FILE = "map/level.%s.tmx";
 	private static final String COLLECTIBLES_LAYER = "collectibles";
+	private static final String ENEMIES_LAYER = "enemies";
 
 	private LevelFactory() {
 
@@ -36,7 +37,7 @@ public final class LevelFactory {
 	 *            A {@link Batch} to use while rendering tiles.
 	 * @param assets
 	 *            {@link AssetManager} from where to get audio and graphics resources for the
-	 *            collectibles.
+	 *            collectibles and enemies.
 	 * @param level
 	 *            Number of the level the returned render should draw.
 	 * @param unitScale
@@ -51,10 +52,15 @@ public final class LevelFactory {
 		LevelRenderer renderer = new LevelRenderer(tiledMap, assets, batch, unitScale);
 
 		for (MapLayer ml : tiledMap.getLayers()) {
-			if (ml.getName().toLowerCase().startsWith(COLLECTIBLES_LAYER)) {
+			String layerName = ml.getName().toLowerCase();
+			if (layerName.startsWith(COLLECTIBLES_LAYER)) {
 				CollectibleRenderer carrots = new CollectibleRenderer(unitScale);
 				carrots.load(world, loader, assets, ml);
 				renderer.addCollectibleRenderer(carrots);
+			} else if (layerName.startsWith(ENEMIES_LAYER)) {
+				EnemyRenderer enemies = new EnemyRenderer(unitScale);
+				enemies.load(world, loader, assets, ml);
+				renderer.addEnemyRenderer(enemies);
 			}
 		}
 		return renderer;

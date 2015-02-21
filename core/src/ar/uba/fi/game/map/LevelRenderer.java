@@ -12,7 +12,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Renders a {@link TiledMap}, previously created from a <code>.tmx</code> file.
+ * Renders a {@link TiledMap}, previously created from a <code>.tmx</code> file, including its
+ * collectibles and enemies layers.
  *
  * @author nfantone
  *
@@ -21,9 +22,11 @@ public class LevelRenderer {
 	private static final String BACKGROUND_PROPERTY = "background";
 	private final OrthogonalTiledMapRenderer renderer;
 	private final Array<CollectibleRenderer> collectibles;
+	private final Array<EnemyRenderer> enemies;
 
 	public LevelRenderer(final TiledMap map, final AssetManager assets, final Batch batch, final float unitScale) {
 		collectibles = new Array<CollectibleRenderer>(3);
+		enemies = new Array<EnemyRenderer>(3);
 
 		Texture background = assets.get(map.getProperties().get(BACKGROUND_PROPERTY,
 				Assets.DEFAULT_BACKGROUND.fileName, String.class),
@@ -34,6 +37,10 @@ public class LevelRenderer {
 
 	public void addCollectibleRenderer(final CollectibleRenderer renderer) {
 		collectibles.add(renderer);
+	}
+
+	public void addEnemyRenderer(final EnemyRenderer renderer) {
+		enemies.add(renderer);
 	}
 
 	/**
@@ -56,6 +63,9 @@ public class LevelRenderer {
 	public void update() {
 		for (CollectibleRenderer collectible : collectibles) {
 			collectible.update(renderer.getBatch(), renderer.getViewBounds());
+		}
+		for (EnemyRenderer enemy : enemies) {
+			enemy.update(renderer.getBatch(), renderer.getViewBounds());
 		}
 	}
 
