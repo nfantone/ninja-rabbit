@@ -18,32 +18,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  *
  */
 public class Environment extends Entity {
-	/**
-	 * The state this {@link Entity} is in after there are no more remaining lives.
-	 */
-	public static final short GAME_OVER = 2;
-
-	/**
-	 * The state this {@link Entity} enters after the end of a level has been reached.
-	 */
-	public static final short EXIT = 4;
-
-	/**
-	 * The state this {@link Entity} is in immediately after {@value Environment#GAME_OVER},
-	 * signaling that the game should be restarted.
-	 */
-	public static final short RESET = 8;
-
-	/**
-	 * The state this {@link Entity} is in following {@value Environment#EXIT}, signaling that the
-	 * player status should be updated to show that the player has reached a new level.
-	 */
-	public static final short NEXT_LEVEL = 16;
-
-	/**
-	 *
-	 */
-	public static final short FINISH_LEVEL = 32;
 
 	/**
 	 * A component that updates the status of the player during the gaming session according to the
@@ -59,7 +33,7 @@ public class Environment extends Entity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.Entity#step(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override

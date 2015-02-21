@@ -3,10 +3,12 @@
  */
 package ar.uba.fi.game.physics;
 
+import ar.uba.fi.game.ai.fsm.NinjaRabbitState;
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Entity;
-import ar.uba.fi.game.entity.NinjaRabbit;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -40,22 +42,17 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 		Vector2 velocity = character.getBody().getLinearVelocity();
 
 		if (character.getBody().getPosition().y < DEATH_ALTITUDE) {
-			character.execute(NinjaRabbit.DEAD);
-		}
-
-		// Cap maximum velocity on X axis
-		if (Math.abs(velocity.x) > MAX_VELOCITY.x) {
-			velocity.x = Math.signum(velocity.x) * MAX_VELOCITY.x;
-			character.getBody().setLinearVelocity(velocity);
-			velocity = character.getBody().getLinearVelocity();
-		}
-
-		if (character.isExecuting(NinjaRabbit.EXIT)) {
-			character.execute(NinjaRabbit.JUMP);
+			MessageManager.getInstance().dispatchMessage(null, MessageType.DEAD.code(), character);
 		} else {
+			// Cap maximum velocity on X axis
+			if (Math.abs(velocity.x) > MAX_VELOCITY.x) {
+				velocity.x = Math.signum(velocity.x) * MAX_VELOCITY.x;
+				character.getBody().setLinearVelocity(velocity);
+				velocity = character.getBody().getLinearVelocity();
+			}
+
 			// Linear velocity dampening
-			if (!character.isExecuting(NinjaRabbit.LEFT) &&
-					!character.isExecuting(NinjaRabbit.RIGHT)) {
+			if (character.isInState(NinjaRabbitState.IDLE)) {
 				velocity = character.getBody().getLinearVelocity();
 				stillTime += Gdx.graphics.getDeltaTime();
 				character.getBody().setLinearVelocity(velocity.x * 0.9f, velocity.y);
@@ -63,10 +60,10 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 				stillTime = 0.0f;
 			}
 
-			// Disable friction if character is not ground
+			// Disable friction if character is not on ground
 			float newFriction = 0.05f;
 			if (groundContacts > 0) {
-				if (!character.isExecuting(NinjaRabbit.LEFT) && !character.isExecuting(NinjaRabbit.RIGHT) && stillTime > 0.2f) {
+				if (character.isInState(NinjaRabbitState.IDLE) && stillTime > 0.2f) {
 					newFriction = 300.0f;
 				} else {
 					newFriction = 0.8f;
@@ -78,32 +75,33 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 			}
 
 			// Move character left or right
-			if (character.isExecuting(NinjaRabbit.RIGHT) && velocity.x < MAX_VELOCITY.x) {
+			if (character.isInState(NinjaRabbitState.RIGHT) && velocity.x < MAX_VELOCITY.x) {
 				character.getBody().applyLinearImpulse(LINEAR_VELOCITY * character.getBody().getMass(), 0.0f, position.x, position.y, true);
-			} else if (character.isExecuting(NinjaRabbit.LEFT) && velocity.x > -MAX_VELOCITY.x) {
+			} else if (character.isInState(NinjaRabbitState.LEFT) && velocity.x > -MAX_VELOCITY.x) {
 				character.getBody()
 						.applyLinearImpulse(-LINEAR_VELOCITY * character.getBody().getMass(), 0.0f, position.x, position.y, true);
 			}
-		}
 
-		if (character.isExecuting(NinjaRabbit.JUMP) && groundContacts > 0) {
-			position = character.getBody().getPosition();
+			// Jump
+			if (character.isInState(NinjaRabbitState.JUMP) && groundContacts > 0) {
+				position = character.getBody().getPosition();
 
-			// Initial jumping impulse (on ground)
-			character.getBody().setLinearVelocity(velocity.x, 0.0f);
-			character.getBody().setTransform(position.x, position.y + 0.01f, 0);
-			character.getBody().applyLinearImpulse(0.0f, JUMP_VELOCITY * character.getBody().getMass() + Math.abs(velocity.x) * 0.2f,
-					position.x,
-					position.y, true);
-			jumpTimeout = 0;
-		} else if (character.isExecuting(NinjaRabbit.JUMP)
-				&& velocity.y < MAX_VELOCITY.y && velocity.y > 0) {
-			// Incrementally decreased impulse added while mid-air the longer the jump button is
-			// held, the higher the character jumps)
-			character.getBody().applyLinearImpulse(0.0f,
-					0.13f * JUMP_VELOCITY * character.getBody().getMass() / ++jumpTimeout,
-					position.x,
-					position.y, true);
+				// Initial jumping impulse (on ground)
+				character.getBody().setLinearVelocity(velocity.x, 0.0f);
+				character.getBody().setTransform(position.x, position.y + 0.01f, 0);
+				character.getBody().applyLinearImpulse(0.0f, JUMP_VELOCITY * character.getBody().getMass() + Math.abs(velocity.x) * 0.2f,
+						position.x,
+						position.y, true);
+				jumpTimeout = 0;
+			} else if (character.isInState(NinjaRabbitState.JUMP)
+					&& velocity.y < MAX_VELOCITY.y && velocity.y > 0) {
+				// Incrementally decreased impulse added while mid-air the longer the jump button is
+				// held, the higher the character jumps)
+				character.getBody().applyLinearImpulse(0.0f,
+						0.13f * JUMP_VELOCITY * character.getBody().getMass() / ++jumpTimeout,
+						position.x,
+						position.y, true);
+			}
 		}
 	}
 
@@ -116,21 +114,6 @@ public class NinjaRabbitPhysicsProcessor implements PhysicsProcessor {
 				GROUND_IDENTIFIER.equals(contact.getFixtureB().getUserData()))) {
 			groundContacts++;
 		}
-
-		// Player has picked up a carrot
-		if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
-			((NinjaRabbit) contact.getFixtureB().getBody().getUserData()).execute(NinjaRabbit.COLLECT);
-		} else if (CarrotPhysicsProcessor.CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			((NinjaRabbit) contact.getFixtureA().getBody().getUserData()).execute(NinjaRabbit.COLLECT);
-		}
-
-		// Player has reach the end of the level
-		if (LevelPhysicsProcessor.EXIT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
-			((NinjaRabbit) contact.getFixtureB().getBody().getUserData()).execute(NinjaRabbit.EXIT);
-		} else if (LevelPhysicsProcessor.EXIT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			((NinjaRabbit) contact.getFixtureA().getBody().getUserData()).execute(NinjaRabbit.EXIT);
-		}
-
 	}
 
 	@Override

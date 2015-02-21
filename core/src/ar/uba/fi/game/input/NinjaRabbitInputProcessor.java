@@ -1,10 +1,16 @@
 package ar.uba.fi.game.input;
 
+import ar.uba.fi.game.ai.fsm.NinjaRabbitState;
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.NinjaRabbit;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.ai.msg.MessageManager;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 
 /**
  * Handles input from keyboard to change the inner state of a {@link NinjaRabbit}.
@@ -12,7 +18,7 @@ import com.badlogic.gdx.InputAdapter;
  * @author nfantone
  *
  */
-public class NinjaRabbitInputProcessor extends InputAdapter {
+public class NinjaRabbitInputProcessor extends InputAdapter implements Telegraph {
 	private final static int JUMP_KEY = Keys.W;
 	private final static int LEFT_KEY = Keys.A;
 	private final static int DUCK_KEY = Keys.S;
@@ -26,25 +32,26 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 			throw new IllegalArgumentException("'character' cannot be null");
 		}
 		this.character = ninjaRabbit;
+		MessageManager.getInstance().addListener(this, MessageType.EXIT.code());
 	}
 
 	@Override
 	public boolean keyDown(final int keycode) {
 		switch (keycode) {
 		case JUMP_KEY:
-			character.execute(NinjaRabbit.JUMP);
+			character.changeState(NinjaRabbitState.JUMP);
 			break;
 		case LEFT_KEY:
-			character.execute(NinjaRabbit.LEFT);
+			character.changeState(NinjaRabbitState.LEFT);
 			break;
 		case RIGHT_KEY:
-			character.execute(NinjaRabbit.RIGHT);
+			character.changeState(NinjaRabbitState.RIGHT);
 			break;
 		case DUCK_KEY:
 			// character.execute(NinjaRabbit.DUCK);
 			break;
 		case RESET_KEY:
-			character.execute(NinjaRabbit.RESET);
+			MessageManager.getInstance().dispatchMessage(null, MessageType.DEAD.code(), character);
 			break;
 		default:
 			break;
@@ -56,20 +63,40 @@ public class NinjaRabbitInputProcessor extends InputAdapter {
 	public boolean keyUp(final int keycode) {
 		switch (keycode) {
 		case JUMP_KEY:
-			character.stop(NinjaRabbit.JUMP);
+			if (Gdx.input.isKeyPressed(RIGHT_KEY)) {
+				character.changeState(NinjaRabbitState.RIGHT);
+			} else if (Gdx.input.isKeyPressed(LEFT_KEY)) {
+				character.changeState(NinjaRabbitState.LEFT);
+			} else {
+				character.changeState(NinjaRabbitState.IDLE);
+			}
 			break;
 		case LEFT_KEY:
-			character.stop(NinjaRabbit.LEFT);
+			if (Gdx.input.isKeyPressed(RIGHT_KEY)) {
+				character.changeState(NinjaRabbitState.RIGHT);
+			} else {
+				character.changeState(NinjaRabbitState.IDLE);
+			}
 			break;
 		case RIGHT_KEY:
-			character.stop(NinjaRabbit.RIGHT);
+			if (Gdx.input.isKeyPressed(LEFT_KEY)) {
+				character.changeState(NinjaRabbitState.LEFT);
+			} else {
+				character.changeState(NinjaRabbitState.IDLE);
+			}
 			break;
 		case DUCK_KEY:
-			character.stop(NinjaRabbit.DUCK);
+			// character.changeState(NinjaRabbitState.IDLE);
 			break;
 		default:
 			break;
 		}
 		return super.keyUp(keycode);
+	}
+
+	@Override
+	public boolean handleMessage(final Telegram msg) {
+		Gdx.input.setInputProcessor(null);
+		return true;
 	}
 }

@@ -7,12 +7,16 @@ import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
-import ar.uba.fi.game.AssetSystem;
+import ar.uba.fi.game.Assets;
 import ar.uba.fi.game.NinjaRabbitGame;
+import ar.uba.fi.game.ai.fsm.NinjaRabbitState;
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Direction;
 import ar.uba.fi.game.entity.Entity;
-import ar.uba.fi.game.entity.NinjaRabbit;
 
+import com.badlogic.gdx.ai.msg.MessageManager;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -27,7 +31,7 @@ import com.badlogic.gdx.utils.Array;
  * @author nfantone
  *
  */
-public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
+public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor, Telegraph {
 	private static final String WALK_REGION = "walk";
 	private static final String JUMP_REGION = "jump";
 	// private static final String DUCK_REGION = "duck";
@@ -42,7 +46,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 	// private final AnimatedBox2DSprite duckSprite;
 
 	public NinjaRabbitGraphicsProcessor(final AssetManager assets) {
-		textureAtlas = assets.get(AssetSystem.NINJA_RABBIT_ATLAS);
+		textureAtlas = assets.get(Assets.NINJA_RABBIT_ATLAS);
 
 		Array<Sprite> walkingSprites = textureAtlas.createSprites(WALK_REGION);
 		standingSprite = new Box2DSprite(walkingSprites.first());
@@ -86,58 +90,66 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor {
 		// // duckSprite.setRegionWidth((int) (duckSprite.getWidth() / FiubaGame.PPM));
 		// duckSprite.setSize(duckSprite.getWidth() / FiubaGame.PPM, duckSprite.getHeight() /
 		// FiubaGame.PPM);
+
+		MessageManager.getInstance().addListener(this, MessageType.DEAD.code());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.graphics.GraphicsProcessor#update(ar.uba.fi.game.entity.Entity,
 	 * com.badlogic.gdx.graphics.Camera)
 	 */
 	@Override
 	public void update(final Entity character, final Camera camera) {
 		camera.position.x = character.getBody() == null ? 0.0f :
-			character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
+				character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
 	public void draw(final Entity character, final Batch batch) {
 		Box2DSprite frame = null;
-		if (character.isExecuting(NinjaRabbit.DEAD) || character.isExecuting(NinjaRabbit.RESET)) {
-			character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
-			frame = standingSprite;
+
+		if (character.isInState(NinjaRabbitState.JUMP)) {
+			jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
+			frame = jumpSprite;
+		} else if (character.isInState(NinjaRabbitState.RIGHT)) {
+			frame = walkRightSprite;
 			character.setDirection(Direction.RIGHT);
+		} else if (character.isInState(NinjaRabbitState.LEFT)) {
+			frame = walkLeftSprite;
+			character.setDirection(Direction.LEFT);
+		} else if (character.isInState(NinjaRabbitState.DUCK)) {
+			// frame = duckSprite;
 		} else {
-			if (character.isExecuting(NinjaRabbit.JUMP)) {
-				jumpSprite.flipFrames(!(Direction.RIGHT.equals(character.getDirection()) ^ jumpSprite.isFlipX()), false, false);
-				frame = jumpSprite;
-			} else if (character.isExecuting(NinjaRabbit.RIGHT)) {
-				frame = walkRightSprite;
-				character.setDirection(Direction.RIGHT);
-			} else if (character.isExecuting(NinjaRabbit.LEFT)) {
-				frame = walkLeftSprite;
-				character.setDirection(Direction.LEFT);
-			} else if (character.isExecuting(NinjaRabbit.DUCK)) {
-				// frame = duckSprite;
-			} else {
-				standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
-				frame = standingSprite;
-				// duckSprite.setTime(0.0f);
-				jumpSprite.setTime(0.0f);
-			}
+			standingSprite.flip(!(Direction.RIGHT.equals(character.getDirection()) ^ standingSprite.isFlipX()), false);
+			frame = standingSprite;
+			// duckSprite.setTime(0.0f);
+			jumpSprite.setTime(0.0f);
 		}
+
+		// Following numbers came from voodoo
 		frame.setPosition(
 				-frame.getWidth() * 0.5f +
-				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
-						? 2.8f : 1.55f),
-						-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
+						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
+								? 2.8f : 1.55f),
+				-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
 
 		frame.draw(batch, character.getBody());
+	}
+
+	@Override
+	public boolean handleMessage(final Telegram msg) {
+		Entity character = (Entity) msg.extraInfo;
+		character.getBody().setTransform(RESPAWN_POSITION, character.getBody().getAngle());
+		character.changeState(NinjaRabbitState.IDLE);
+		character.setDirection(Direction.RIGHT);
+		return true;
 	}
 
 	@Override

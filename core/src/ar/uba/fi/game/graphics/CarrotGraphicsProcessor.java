@@ -1,7 +1,7 @@
 package ar.uba.fi.game.graphics;
 
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-import ar.uba.fi.game.AssetSystem;
+import ar.uba.fi.game.Assets;
 import ar.uba.fi.game.entity.Entity;
 
 import com.badlogic.gdx.assets.AssetManager;
@@ -18,7 +18,7 @@ public class CarrotGraphicsProcessor implements GraphicsProcessor {
 	private final Box2DSprite carrot;
 
 	public CarrotGraphicsProcessor(final AssetManager manager) {
-		carrot = new Box2DSprite(manager.get(AssetSystem.NINJA_RABBIT_ATLAS).findRegion(CARROT_REGION));
+		carrot = new Box2DSprite(manager.get(Assets.NINJA_RABBIT_ATLAS).findRegion(CARROT_REGION));
 	}
 
 	@Override

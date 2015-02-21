@@ -4,6 +4,9 @@ import ar.uba.fi.game.audio.AudioProcessor;
 import ar.uba.fi.game.graphics.GraphicsProcessor;
 import ar.uba.fi.game.physics.PhysicsProcessor;
 
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -18,9 +21,9 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public abstract class Entity implements Disposable {
 	/**
-	 * Actions currently being performed by this entity, represented as a stream of bits.
+	 * Handler of every possible state this entity may be in.
 	 */
-	private short actions;
+	private final StateMachine<Entity> stateMachine;
 
 	/**
 	 * The Box2D {@link Body} containing all physical properties of this entity.
@@ -48,9 +51,15 @@ public abstract class Entity implements Disposable {
 	private final AudioProcessor audio;
 
 	public Entity(final GraphicsProcessor graphics, final PhysicsProcessor physics, final AudioProcessor audio) {
+		this(graphics, physics, audio, null);
+	}
+
+	public Entity(final GraphicsProcessor graphics, final PhysicsProcessor physics, final AudioProcessor audio,
+			final State<Entity> initialState) {
 		this.graphics = graphics;
 		this.physics = physics;
 		this.audio = audio;
+		stateMachine = new DefaultStateMachine<Entity>(this, initialState);
 	}
 
 	/**
@@ -62,6 +71,7 @@ public abstract class Entity implements Disposable {
 	 */
 	public void update(final Camera camera) {
 		graphics.update(this, camera);
+		stateMachine.update();
 	}
 
 	/**
@@ -95,49 +105,46 @@ public abstract class Entity implements Disposable {
 	}
 
 	/**
-	 * Sets an action to be performed in the next execution step for this character.
+	 * Sets a new {@link State} for this {@link Entity} to be performed in the next execution step
+	 * for this character.
 	 *
-	 * @param action
-	 *            The action identifier. Each {@link Entity} may define its own.
+	 * @see StateMachine#changeState(State)
 	 *
-	 * @return A binary representation of all the actions being executed.
+	 * @param newState
+	 *            The state to make the transition to. Each {@link Entity} may define its own.
+	 *
 	 */
-	public short execute(final short action) {
-		actions |= action;
-		return actions;
+	public void changeState(final State<Entity> newState) {
+		stateMachine.changeState(newState);
 	}
 
 	/**
-	 * Halts the execution of the given action for the next rendering step.
+	 * Whether this entity is performing the given state or not.
 	 *
-	 * @param action
-	 *            The action identifier. Each {@link Entity} may define its own.
-	 * @return A binary representation of all the actions still being executed, after the exclusion
-	 *         of the one being stopped.
+	 * @see StateMachine#isInState(State)
+	 * @param state
+	 *            The state to test against the current actions of the entity.
+	 * @return true if this entity is executing the state; false, otherwise.
 	 */
-	public short stop(final short action) {
-		actions &= ~action;
-		return actions;
+	public boolean isInState(final State<Entity> state) {
+		return state != null && stateMachine.isInState(state);
 	}
 
 	/**
-	 * Whether this entity is performing the given action or not.
+	 * Returns the current state of this {@link Entity}.
 	 *
-	 * @param action
-	 *            The action to test against the current actions of the entity.
-	 * @return true if this entity is executing the action; false, otherwise.
+	 * @see StateMachine#getCurrentState()
+	 * @return The {@link State} this entity is currently in.
 	 */
-	public boolean isExecuting(final short action) {
-		return (actions & action) == action;
+	public State<Entity> getCurrentState() {
+		return stateMachine.getCurrentState();
 	}
 
-	/**
-	 * Reset all actions to the initial state, as if none were being executed.
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.badlogic.gdx.utils.Disposable#dispose()
 	 */
-	public void clearActions() {
-		actions = 0;
-	}
-
 	@Override
 	public void dispose() {
 		audio.dispose();
@@ -161,4 +168,19 @@ public abstract class Entity implements Disposable {
 	public void setDirection(final Direction direction) {
 		this.direction = direction;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getClass().getSimpleName())
+		.append(" [state=")
+		.append(stateMachine.getCurrentState()).append("]");
+		return builder.toString();
+	}
+
 }

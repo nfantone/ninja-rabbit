@@ -1,5 +1,6 @@
 package ar.uba.fi.game.map;
 
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Collectible;
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.EntityFactory;
@@ -7,6 +8,9 @@ import ar.uba.fi.game.physics.BodyEditorLoader;
 import ar.uba.fi.game.physics.BodyFactory;
 import ar.uba.fi.game.physics.CarrotBodyFactory;
 
+import com.badlogic.gdx.ai.msg.MessageManager;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -17,17 +21,18 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 
 /**
  *
  * @author nfantone
  *
  */
-public class CollectibleRenderer {
+public class CollectibleRenderer implements Telegraph {
 	private static final String CARROT_TYPE = "carrot";
 	private static final String TYPE_PROPERTY = "type";
 	private final Array<Entity> collectibles;
-	private final Array<Entity> removed;
+	private final ObjectSet<Entity> removed;
 	private final float unitScale;
 
 	public CollectibleRenderer() {
@@ -36,8 +41,9 @@ public class CollectibleRenderer {
 
 	public CollectibleRenderer(final float unitScale) {
 		this.collectibles = new Array<Entity>();
-		this.removed = new Array<Entity>();
+		this.removed = new ObjectSet<Entity>(16);
 		this.unitScale = unitScale;
+		MessageManager.getInstance().addListener(this, MessageType.COLLECTED.code());
 	}
 
 	public void load(final World world, final BodyEditorLoader loader, final AssetManager assets, final MapLayer layer) {
@@ -78,18 +84,22 @@ public class CollectibleRenderer {
 	public void update(final Batch batch, final Rectangle viewBounds) {
 		for (Entity e : collectibles) {
 			if (viewBounds == null) {
-				renderEntity(batch, e);
+				e.update(null);
+				e.step(batch);
 			} else {
 				if (viewBounds.contains(e.getBody().getPosition())) {
 					e.getBody().setActive(true);
-					renderEntity(batch, e);
+					e.update(null);
+					e.step(batch);
 				} else {
 					e.getBody().setActive(false);
 				}
 			}
 		}
 
-		collectibles.removeAll(removed, true);
+		for (Entity c : removed) {
+			collectibles.removeValue(c, true);
+		}
 		removed.clear();
 	}
 
@@ -97,11 +107,10 @@ public class CollectibleRenderer {
 		update(batch, null);
 	}
 
-	private void renderEntity(final Batch batch, final Entity e) {
-		e.step(batch);
-		if (e.isExecuting(Collectible.COLLECTED)) {
-			removed.add(e);
-			e.stop(Collectible.COLLECTED);
-		}
+	@Override
+	public boolean handleMessage(final Telegram msg) {
+		Collectible collectible = (Collectible) msg.extraInfo;
+		removed.add(collectible);
+		return true;
 	}
 }
