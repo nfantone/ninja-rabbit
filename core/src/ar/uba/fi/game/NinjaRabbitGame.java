@@ -40,6 +40,7 @@ public class NinjaRabbitGame extends Game implements Telegraph {
 		batch = new SpriteBatch();
 		assetsManager = new AssetManager();
 		assetsManager.load(Assets.NINJA_RABBIT_ATLAS);
+		assetsManager.load(Assets.ENEMIES_ATLAS);
 		assetsManager.load(Assets.NINJA_RABBIT_THEME);
 		assetsManager.load(Assets.JUMP_FX);
 		assetsManager.load(Assets.LIFE_LOST_FX);
@@ -100,7 +101,7 @@ public class NinjaRabbitGame extends Game implements Telegraph {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.badlogic.gdx.ai.msg.Telegraph#handleMessage(com.badlogic.gdx.ai.msg.Telegram)
 	 */
 	@Override
