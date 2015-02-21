@@ -87,7 +87,9 @@ public abstract class Entity implements Disposable {
 	 */
 	public void step(final Batch batch) {
 		physics.update(this);
-		audio.update(this);
+		if (audio != null) {
+			audio.update(this);
+		}
 		graphics.draw(this, batch);
 	}
 
