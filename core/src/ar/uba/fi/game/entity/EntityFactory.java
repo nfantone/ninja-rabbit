@@ -111,10 +111,12 @@ public final class EntityFactory {
 			}
 		}
 		NinjaRabbit ninjaRabbit = new NinjaRabbit(player, bodyProcessor, graphics, physics, audio);
-		Gdx.input.setInputProcessor(new NinjaRabbitInputProcessor(ninjaRabbit));
+
 		if (Ouya.isRunningOnOuya()) {
-			// TODO Remover anterior.
+			Controllers.clearListeners();
 			Controllers.addListener(new NinjaRabbitControllerProcessor(ninjaRabbit));
+		} else {
+			Gdx.input.setInputProcessor(new NinjaRabbitInputProcessor(ninjaRabbit));
 		}
 		return ninjaRabbit;
 	}

@@ -3,7 +3,6 @@ package ar.uba.fi.game;
 import java.io.File;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,11 +10,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
+ * A convenient place to store and access every {@link AssetDescriptor}.
  *
  * @author nfantone
  *
  */
-public class AssetSystem extends AssetManager {
+public final class Assets {
+
+	private Assets() {
+	};
+
 	public static final AssetDescriptor<Sound> CRUNCH_FX = new AssetDescriptor<Sound>("sfx" + File.separator + "crunch.ogg",
 			Sound.class);
 

@@ -1,6 +1,6 @@
 package ar.uba.fi.game.graphics.hud;
 
-import ar.uba.fi.game.AssetSystem;
+import ar.uba.fi.game.Assets;
 import ar.uba.fi.game.player.PlayerStatus;
 import ar.uba.fi.game.player.PlayerStatusObserver;
 
@@ -43,7 +43,7 @@ public class StatusBar implements PlayerStatusObserver {
 
 		Label.LabelStyle style = new Label.LabelStyle();
 		style.fontColor = Color.WHITE;
-		style.font = assets.get(AssetSystem.HUD_FONT);
+		style.font = assets.get(Assets.HUD_FONT);
 		style.font.setFixedWidthGlyphs(NUMBER_GLYPHS);
 
 		collectiblesLabel = new Label(String.format(TWO_DIGITS, 0), style);
@@ -51,7 +51,7 @@ public class StatusBar implements PlayerStatusObserver {
 		scoreLabel = new Label(String.format(EIGHT_DIGITS, 0), style);
 		timeLabel = new Label(String.format(THREE_DIGITS, 0), style);
 
-		TextureAtlas hudAtlas = assets.get(AssetSystem.NINJA_RABBIT_ATLAS);
+		TextureAtlas hudAtlas = assets.get(Assets.NINJA_RABBIT_ATLAS);
 
 		Table table = new Table();
 		table.add(new Image(hudAtlas.findRegion(SMALL_CARROT_REGION))).padRight(8.0f);

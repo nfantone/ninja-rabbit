@@ -18,6 +18,7 @@ gradlew desktop:run
 This project was developed using the following frameworks and tools:
 
  - [libGDX](http://libgdx.badlogicgames.com/) - A great **JAVA** game development framework.
+ - [gdx-ai](https://github.com/libgdx/gdx-ai) - Artificial Intelligence framework for libGDX games.
  - [Box2D](http://box2d.org/) - Physics engine. _libGDX_ has a built-in **JAVA** implementation of it.
  - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/wiki/Home) - A set of utility classes and methods that alleviates common work while using _libGDX_. Written by the renowned [@dermetfan](https://www.youtube.com/user/dermetfan).
  - [Physics Body Editor](http://www.aurelienribon.com/blog/projects/physics-body-editor/) - Developed by [Aurelien Ribon](http://www.aurelienribon.com/blog/), this tool allows you draw Box2D bodies for your sprites, export the data as `json` and load them in your _libGDX_ game.

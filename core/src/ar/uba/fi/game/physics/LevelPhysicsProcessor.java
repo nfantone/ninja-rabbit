@@ -1,10 +1,11 @@
-
 package ar.uba.fi.game.physics;
 
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
+import ar.uba.fi.game.ai.fsm.NinjaRabbitState;
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Entity;
-import ar.uba.fi.game.entity.Environment;
 
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,32 +15,36 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
-/** Loads and updated objects as Box2D bodies and fixtures as a {@link Box2DMapObjectParser} would from a {@link Map}.
+/**
+ * Loads and updates objects as Box2D bodies and fixtures as a {@link Box2DMapObjectParser} would
+ * from a {@link Map}.
  *
- * @author nfantone */
+ * @author nfantone
+ */
 public class LevelPhysicsProcessor implements PhysicsProcessor {
 	public static final String EXIT_IDENTIFIER = "exit";
 	public static final String ENVIRONMENT_IDENTIFIER = "environment";
 
 	private final Box2DDebugRenderer b2dRenderer;
 	private final Box2DMapObjectListener mapObjectListener;
+	private boolean exitSignaled;
 
 	private static final class Box2DMapObjectListener extends Box2DMapObjectParser.Listener.Adapter {
 		private Body body;
 
 		@Override
-		public void created (final Body body, final MapObject mapObject) {
+		public void created(final Body body, final MapObject mapObject) {
 			if (ENVIRONMENT_IDENTIFIER.equals(body.getUserData())) {
 				this.body = body;
 			}
 		}
 
-		public Body getBody () {
+		public Body getBody() {
 			return body;
 		}
 	}
 
-	public LevelPhysicsProcessor (final World world, final Map map, final float unitScale) {
+	public LevelPhysicsProcessor(final World world, final Map map, final float unitScale) {
 		b2dRenderer = new Box2DDebugRenderer();
 		mapObjectListener = new Box2DMapObjectListener();
 		Box2DMapObjectParser objectParser = new Box2DMapObjectParser(mapObjectListener, unitScale);
@@ -47,7 +52,7 @@ public class LevelPhysicsProcessor implements PhysicsProcessor {
 	}
 
 	@Override
-	public void update (final Entity entity) {
+	public void update(final Entity entity) {
 		// b2dRenderer.render(world, viewport.getCamera().combined);
 		if (entity.getBody() == null) {
 			mapObjectListener.getBody().setUserData(entity);
@@ -56,35 +61,40 @@ public class LevelPhysicsProcessor implements PhysicsProcessor {
 	}
 
 	@Override
-	public void beginContact (final Contact contact) {
-		// Player has reach the end of the level
-		if (EXIT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
-			((Environment)contact.getFixtureA().getBody().getUserData()).execute(Environment.EXIT);
-		} else if (EXIT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			((Environment)contact.getFixtureB().getBody().getUserData()).execute(Environment.EXIT);
+	public void beginContact(final Contact contact) {
+		if (!exitSignaled) {
+			// Player has reach the end of the level
+			if (EXIT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
+				Entity character = (Entity) contact.getFixtureB().getBody().getUserData();
+				MessageManager.getInstance().dispatchMessage(null, MessageType.EXIT.code(), character);
+				character.changeState(NinjaRabbitState.JUMP);
+				exitSignaled = true;
+			} else if (EXIT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
+				Entity character = (Entity) contact.getFixtureA().getBody().getUserData();
+				MessageManager.getInstance().dispatchMessage(null, MessageType.EXIT.code(), character);
+				character.changeState(NinjaRabbitState.JUMP);
+				exitSignaled = true;
+			}
 		}
 	}
 
 	@Override
-	public void endContact (final Contact contact) {
+	public void endContact(final Contact contact) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void preSolve (final Contact contact, final Manifold oldManifold) {
+	public void preSolve(final Contact contact, final Manifold oldManifold) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void postSolve (final Contact contact, final ContactImpulse impulse) {
+	public void postSolve(final Contact contact, final ContactImpulse impulse) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void dispose () {
+	public void dispose() {
 		if (b2dRenderer != null) {
 			b2dRenderer.dispose();
 		}

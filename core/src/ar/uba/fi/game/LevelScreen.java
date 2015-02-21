@@ -5,8 +5,6 @@ package ar.uba.fi.game;
 
 import ar.uba.fi.game.entity.Entity;
 import ar.uba.fi.game.entity.EntityFactory;
-import ar.uba.fi.game.entity.Environment;
-import ar.uba.fi.game.entity.NinjaRabbit;
 import ar.uba.fi.game.graphics.BoundedCamera;
 import ar.uba.fi.game.graphics.hud.StatusBar;
 import ar.uba.fi.game.map.LevelFactory;
@@ -15,6 +13,7 @@ import ar.uba.fi.game.physics.BodyEditorLoader;
 import ar.uba.fi.game.player.PlayerStatusObserver;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -83,18 +82,9 @@ public class LevelScreen extends AbstractScreen {
 		environment.step(game.getBatch());
 		game.getBatch().end();
 
-		hud.render();
+		MessageManager.getInstance().update(delta);
 
-		if (environment.isExecuting(Environment.RESET)) {
-			game.reset();
-		} else if (ninjaRabbit.isExecuting(NinjaRabbit.DEAD) && !environment.isExecuting(Environment.GAME_OVER)
-				|| ninjaRabbit.isExecuting(NinjaRabbit.RESET)) {
-			environment.clearActions();
-			ninjaRabbit.clearActions();
-			game.restartCurrentLevel();
-		} else if (environment.isExecuting(Environment.FINISH_LEVEL)) {
-			game.beginNextLevel();
-		}
+		hud.render();
 	}
 
 	/*

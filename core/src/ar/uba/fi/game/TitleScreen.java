@@ -34,9 +34,9 @@ public class TitleScreen extends AbstractScreen {
 
 		Label.LabelStyle style = new Label.LabelStyle();
 		style.fontColor = Color.WHITE;
-		style.font = game.getAssetsManager().get(AssetSystem.HUD_FONT);
+		style.font = game.getAssetsManager().get(Assets.HUD_FONT);
 
-		Image logo = new Image(game.getAssetsManager().get(AssetSystem.NINJA_RABBIT_ATLAS).findRegion(WALK_REGION));
+		Image logo = new Image(game.getAssetsManager().get(Assets.NINJA_RABBIT_ATLAS).findRegion(WALK_REGION));
 
 		Label titleLabel = new Label(TITLE, style);
 		titleLabel.setFontScale(1.2f);
@@ -44,12 +44,12 @@ public class TitleScreen extends AbstractScreen {
 		table.add(logo).colspan(2).row();
 		table.add(titleLabel).padBottom(60.0f).colspan(2).row();
 
-		final Image exitIcon = new Image(game.getAssetsManager().get(AssetSystem.SWORD));
+		final Image exitIcon = new Image(game.getAssetsManager().get(Assets.SWORD));
 		exitIcon.setVisible(false);
-		final Image beginIcon = new Image(game.getAssetsManager().get(AssetSystem.SWORD));
+		final Image beginIcon = new Image(game.getAssetsManager().get(Assets.SWORD));
 
 		TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-		buttonStyle.font = game.getAssetsManager().get(AssetSystem.HUD_FONT);
+		buttonStyle.font = game.getAssetsManager().get(Assets.HUD_FONT);
 
 		TextButton beginButton = new TextButton(BEGIN_OPTION, buttonStyle);
 		beginButton.addListener(new ClickListener() {

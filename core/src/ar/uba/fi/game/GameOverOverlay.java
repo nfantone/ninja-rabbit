@@ -30,7 +30,7 @@ public class GameOverOverlay implements Disposable {
 		stage = new Stage(new ScreenViewport(), batch);
 		Label.LabelStyle style = new Label.LabelStyle();
 		style.fontColor = Color.WHITE;
-		style.font = assets.get(AssetSystem.HUD_FONT);
+		style.font = assets.get(Assets.HUD_FONT);
 		Label gameOver = new Label(GAME_OVER_TEXT, style);
 
 		Table table = new Table();

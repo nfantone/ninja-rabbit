@@ -1,12 +1,16 @@
 package ar.uba.fi.game.physics;
 
+import ar.uba.fi.game.ai.fsm.CarrotState;
+import ar.uba.fi.game.ai.msg.MessageType;
 import ar.uba.fi.game.entity.Collectible;
 import ar.uba.fi.game.entity.Entity;
 
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 /**
@@ -24,9 +28,20 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 	@Override
 	public void beginContact(final Contact contact) {
 		if (CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
-			((Collectible) contact.getFixtureA().getBody().getUserData()).execute(Collectible.COLLECTED);
+			collectCarrot(contact.getFixtureA());
 		} else if (CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
-			((Collectible) contact.getFixtureB().getBody().getUserData()).execute(Collectible.COLLECTED);
+			collectCarrot(contact.getFixtureB());
+		}
+	}
+
+	/**
+	 * @param contact
+	 */
+	private void collectCarrot(final Fixture fixture) {
+		Collectible carrot = (Collectible) fixture.getBody().getUserData();
+		if (!carrot.isCollected()) {
+			carrot.setCollected(true);
+			MessageManager.getInstance().dispatchMessage(null, MessageType.COLLECTED.code(), carrot);
 		}
 	}
 
@@ -48,18 +63,19 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 	@Override
 	public void update(final Entity character) {
 		Body body = character.getBody();
-		Vector2 position = character.getBody().getPosition();
-		if (character.isExecuting(Collectible.COLLECTED)) {
+
+		if (((Collectible) character).isCollected()) {
 			body.getWorld().destroyBody(body);
 		} else {
-			if (!character.isExecuting(Collectible.UP)) {
+			Vector2 position = character.getBody().getPosition();
+			if (!character.isInState(CarrotState.UP)) {
 				origin = position.y;
 				body.setLinearVelocity(0.0f, VERTICAL_VELOCITY);
-				character.execute(Collectible.UP);
+				character.changeState(CarrotState.UP);
 			} else if (position.y - origin > MAX_DISTANCE) {
 				body.setLinearVelocity(0.0f, -VERTICAL_VELOCITY);
 			} else if (position.y <= origin) {
-				character.stop(Collectible.UP);
+				character.changeState(CarrotState.DOWN);
 			}
 		}
 	}
