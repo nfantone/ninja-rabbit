@@ -10,8 +10,8 @@ allprojects {
 	version = '1.0'
 	ext {
 		appName = 'fiuba-game2'
-		gdxVersion = '1.5.4-SNAPSHOT'
-		roboVMVersion = '1.0.0-alpha-04'
+		gdxVersion = '1.5.5-SNAPSHOT'
+		roboVMVersion = '1.0.0-beta-04'
 		box2DLightsVersion = '1.4-SNAPSHOT'
 		gdxAiVersion = '1.5.1-SNAPSHOT'
 	}
