@@ -227,4 +227,12 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="enemies">
+  <object x="874" y="406">
+   <ellipse/>
+  </object>
+  <object x="978" y="405">
+   <ellipse/>
+  </object>
+ </objectgroup>
 </map>

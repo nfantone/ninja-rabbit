@@ -1,0 +1,109 @@
+enemies.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+slime-squashed
+  rotate: false
+  xy: 2, 98
+  size: 57, 13
+  orig: 57, 13
+  offset: 0, 0
+  index: -1
+slime-green-walk
+  rotate: false
+  xy: 2, 179
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: 0
+slime-walk
+  rotate: false
+  xy: 2, 143
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: 0
+slime-green-dead
+  rotate: false
+  xy: 2, 215
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1
+slime-green-walk
+  rotate: false
+  xy: 2, 34
+  size: 57, 30
+  orig: 57, 30
+  offset: 0, 0
+  index: 1
+slime-hit
+  rotate: false
+  xy: 2, 323
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1
+slime-walk
+  rotate: false
+  xy: 2, 2
+  size: 57, 30
+  orig: 57, 30
+  offset: 0, 0
+  index: 1
+slime-blue-dead
+  rotate: false
+  xy: 2, 359
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1
+slime-green-squashed
+  rotate: false
+  xy: 2, 113
+  size: 57, 13
+  orig: 57, 13
+  offset: 0, 0
+  index: -1
+slime-blue-hit
+  rotate: false
+  xy: 2, 323
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1
+slime-blue-walk
+  rotate: false
+  xy: 2, 287
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: 0
+slime-blue-squashed
+  rotate: false
+  xy: 2, 128
+  size: 57, 13
+  orig: 57, 13
+  offset: 0, 0
+  index: -1
+slime-blue-walk
+  rotate: false
+  xy: 2, 66
+  size: 57, 30
+  orig: 57, 30
+  offset: 0, 0
+  index: 1
+slime-dead
+  rotate: false
+  xy: 2, 251
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1
+slime-green-hit
+  rotate: false
+  xy: 2, 323
+  size: 49, 34
+  orig: 49, 34
+  offset: 0, 0
+  index: -1

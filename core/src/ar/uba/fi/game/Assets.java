@@ -26,6 +26,9 @@ public final class Assets {
 	public static final AssetDescriptor<TextureAtlas> NINJA_RABBIT_ATLAS = new AssetDescriptor<TextureAtlas>("ninja-rabbit.pack",
 			TextureAtlas.class);
 
+	public static final AssetDescriptor<TextureAtlas> ENEMIES_ATLAS = new AssetDescriptor<TextureAtlas>("enemies.pack",
+			TextureAtlas.class);
+
 	public static final AssetDescriptor<Music> NINJA_RABBIT_THEME = new AssetDescriptor<Music>("sfx" + File.separator + "theme.ogg",
 			Music.class);
 
