@@ -44,9 +44,9 @@ public class LevelStartScreen extends AbstractScreen {
 
 		Label.LabelStyle style = new Label.LabelStyle();
 		style.fontColor = Color.WHITE;
-		style.font = game.getAssetsManager().get(AssetSystem.HUD_FONT);
+		style.font = game.getAssetsManager().get(Assets.HUD_FONT);
 
-		TextureAtlas hudAtlas = game.getAssetsManager().get(AssetSystem.NINJA_RABBIT_ATLAS);
+		TextureAtlas hudAtlas = game.getAssetsManager().get(Assets.NINJA_RABBIT_ATLAS);
 
 		Label collectiblesLabel = new Label(String.format(TWO_DIGITS, playerStatus.getCollectibles()), style);
 		Label livesLabel = new Label(String.format(LIVES_FORMAT, playerStatus.getLives()), style);

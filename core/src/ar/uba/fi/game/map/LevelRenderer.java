@@ -1,6 +1,6 @@
 package ar.uba.fi.game.map;
 
-import ar.uba.fi.game.AssetSystem;
+import ar.uba.fi.game.Assets;
 import ar.uba.fi.game.entity.Collectible;
 
 import com.badlogic.gdx.assets.AssetManager;
@@ -26,7 +26,7 @@ public class LevelRenderer {
 		collectibles = new Array<CollectibleRenderer>(3);
 
 		Texture background = assets.get(map.getProperties().get(BACKGROUND_PROPERTY,
-				AssetSystem.DEFAULT_BACKGROUND.fileName, String.class),
+				Assets.DEFAULT_BACKGROUND.fileName, String.class),
 				Texture.class);
 
 		renderer = new BackgroundTiledMapRenderer(map, unitScale, batch, background);
