@@ -37,7 +37,6 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor, Telegrap
 	// private static final String DUCK_REGION = "duck";
 	private static final Vector2 RESPAWN_POSITION = new Vector2(0.6f, 3.2f);
 
-	private final TextureAtlas textureAtlas;
 	private final Box2DSprite standingSprite;
 	private final AnimatedBox2DSprite walkRightSprite;
 	private final AnimatedBox2DSprite walkLeftSprite;
@@ -46,7 +45,7 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor, Telegrap
 	// private final AnimatedBox2DSprite duckSprite;
 
 	public NinjaRabbitGraphicsProcessor(final AssetManager assets) {
-		textureAtlas = assets.get(Assets.NINJA_RABBIT_ATLAS);
+		final TextureAtlas textureAtlas = assets.get(Assets.NINJA_RABBIT_ATLAS);
 
 		Array<Sprite> walkingSprites = textureAtlas.createSprites(WALK_REGION);
 		standingSprite = new Box2DSprite(walkingSprites.first());
@@ -96,19 +95,19 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor, Telegrap
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ar.uba.fi.game.graphics.GraphicsProcessor#update(ar.uba.fi.game.entity.Entity,
 	 * com.badlogic.gdx.graphics.Camera)
 	 */
 	@Override
 	public void update(final Entity character, final Camera camera) {
 		camera.position.x = character.getBody() == null ? 0.0f :
-				character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
+			character.getBody().getPosition().x + camera.viewportWidth * 0.25f;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.entity.GraphicsProcessor#draw(com.badlogic.gdx.graphics.g2d.Batch)
 	 */
 	@Override
@@ -136,9 +135,9 @@ public class NinjaRabbitGraphicsProcessor implements GraphicsProcessor, Telegrap
 		// Following numbers came from voodoo
 		frame.setPosition(
 				-frame.getWidth() * 0.5f +
-						Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
-								? 2.8f : 1.55f),
-				-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
+				Box2DUtils.width(character.getBody()) / (Direction.RIGHT.equals(character.getDirection())
+						? 2.8f : 1.55f),
+						-frame.getHeight() * 0.5f + Box2DUtils.width(character.getBody()) + 0.36f);
 
 		frame.draw(batch, character.getBody());
 	}
