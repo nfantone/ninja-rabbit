@@ -27,9 +27,11 @@ public class CarrotPhysicsProcessor implements PhysicsProcessor {
 
 	@Override
 	public void beginContact(final Contact contact) {
-		if (CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
+		if (CARROT_IDENTIFIER.equals(contact.getFixtureA().getUserData()) &&
+				!SlimePhysicsProcessor.SLIME_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
 			collectCarrot(contact.getFixtureA());
-		} else if (CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData())) {
+		} else if (CARROT_IDENTIFIER.equals(contact.getFixtureB().getUserData()) &&
+				!SlimePhysicsProcessor.SLIME_IDENTIFIER.equals(contact.getFixtureA().getUserData())) {
 			collectCarrot(contact.getFixtureB());
 		}
 	}
