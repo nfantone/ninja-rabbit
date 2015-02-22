@@ -27,7 +27,7 @@ public class NinjaRabbitPlayerStatusProcessor extends PlayerStatusProcessor impl
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see ar.uba.fi.game.player.PlayerStatusProcessor#doUpdate(ar.uba.fi.game.entity.Entity)
 	 */
 	@Override
@@ -43,7 +43,6 @@ public class NinjaRabbitPlayerStatusProcessor extends PlayerStatusProcessor impl
 			if (getStatus().getLives() > 0) {
 				getStatus().setLives((short) (getStatus().getLives() - 1));
 			}
-			System.out.println("Dead received!");
 		}
 		return true;
 	}
